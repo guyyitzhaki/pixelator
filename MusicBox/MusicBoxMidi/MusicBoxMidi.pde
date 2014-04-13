@@ -10,6 +10,7 @@ int delay = 0;
 int midiDevice = -1;
 
 int gridSize;
+int movieWidth = -1;
 MidiBus midi; 
 ArrayList<Integer> lastTriggered;
 ArrayList<Boolean> triggered;
@@ -18,15 +19,17 @@ boolean paused = false;
 boolean ended = false;
 
 void setup() {
-  size(640, 480);
-  triggerHeight = height / 2;
+  size(1024, 768);
   MidiBus.list();
+  triggerHeight = height / 2;
+
+  
   loadSettings();
+
   midi = new MidiBus(this, -1, midiDevice);
   PFont f = loadFont("Consolas-12.vlw");
   textFont(f);
 
-  gridSize = width / triggerCount;
   lastTriggered = new ArrayList<Integer>();
   triggered = new ArrayList<Boolean>();
   for (int i = 0; i < triggerCount; i++) {
@@ -34,7 +37,7 @@ void setup() {
     triggered.add(false);
   }
 
-  background(0);
+  background(100,100,100);
   movie = new Movie(this, movieName);
   movie.play();
   movie.speed(speed);
@@ -53,6 +56,18 @@ void draw() {
   text(movieName + " "+ nf(movie.time(), 2, 2) +":" + nf(movie.duration(), 2, 2) + "  ("+ time + ")", 10, 10);
 
   movie.loadPixels();
+  
+  if (movie.pixels.length == 0) {
+    return;
+  }
+  else {
+    if (movieWidth == -1) {
+      movieWidth = movie.width;
+      gridSize = movieWidth / triggerCount;
+      println(movieWidth);
+    }
+  }
+  
   noFill();
   int rectWidth = 20;
   for (int i = 0; i < triggerCount; i++) {
@@ -61,7 +76,7 @@ void draw() {
     int startx = i * gridSize;
     for (int j = 0; j < gridSize; j++) {
       int x = startx + j;
-      color c = movie.pixels[y * width + x];
+      color c = movie.pixels[y * movie.width + x];
       float brightness = brightness(c);
       if (brightness > trigger) {
         foundTrigger = true;
@@ -73,11 +88,14 @@ void draw() {
       triggered.set(i, false);
     }
     else if (!alreadyTriggered && foundTrigger) {
+      println("should trigger");
       if (millis() - lastTriggered.get(i) > delay) {
+        println("triggered " + i);
         midi.sendNoteOn(0, i * 8, 127);
         lastTriggered.set(i, millis()); 
         triggered.set(i, true);
-        stroke(255);
+        stroke(0,255,0);
+        fill(255);
         rect(startx, triggerHeight - rectWidth / 2, gridSize, rectWidth);
       }
     }
@@ -87,7 +105,7 @@ void draw() {
   line(0, triggerHeight, width, triggerHeight);
 
   for (int i = 1; i < triggerCount; i++) {
-    int x = i * width / triggerCount;
+    int x = i * movieWidth / triggerCount;
     line(x, triggerHeight - 10, x, triggerHeight + 10);
   }
 
