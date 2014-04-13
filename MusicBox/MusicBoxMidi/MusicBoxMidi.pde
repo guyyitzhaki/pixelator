@@ -23,7 +23,6 @@ void setup() {
   MidiBus.list();
   triggerHeight = height / 2;
 
-  
   loadSettings();
 
   midi = new MidiBus(this, -1, midiDevice);
@@ -88,7 +87,6 @@ void draw() {
       triggered.set(i, false);
     }
     else if (!alreadyTriggered && foundTrigger) {
-      println("should trigger");
       if (millis() - lastTriggered.get(i) > delay) {
         println("triggered " + i);
         midi.sendNoteOn(0, i * 8, 127);
@@ -102,7 +100,7 @@ void draw() {
   }
 
   stroke(255, 0, 0);
-  line(0, triggerHeight, width, triggerHeight);
+  line(0, triggerHeight, movieWidth, triggerHeight);
 
   for (int i = 1; i < triggerCount; i++) {
     int x = i * movieWidth / triggerCount;
