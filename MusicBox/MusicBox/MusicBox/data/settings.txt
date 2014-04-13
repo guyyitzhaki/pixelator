@@ -1,0 +1,5 @@
+movie transit.mov
+gridSize 10
+trigger 220
+speed 4.0
+delay 1000

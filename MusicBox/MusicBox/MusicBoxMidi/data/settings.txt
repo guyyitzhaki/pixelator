@@ -1,0 +1,7 @@
+movie test.mov
+midiDevice 1
+triggerCount 10
+trigger 200
+triggerHeight 100
+speed 1.0
+delay 0
