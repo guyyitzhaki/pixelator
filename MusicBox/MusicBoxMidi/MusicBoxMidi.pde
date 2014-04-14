@@ -89,7 +89,7 @@ void draw() {
     }
     else if (!alreadyTriggered && foundTrigger) {
       if (millis() - lastTriggered.get(i) > delay) {
-        println("triggering " + i + " note: " + i * noteGap);
+        println("triggering " + i + " note: " + (i * noteGap));
         midi.sendNoteOn(midiChannel, i * noteGap, 127);
         lastTriggered.set(i, millis()); 
         triggered.set(i, true);
