@@ -40,7 +40,7 @@ void setup() {
     triggered.add(false);
   }
 
-  background(100,100,100);
+  background(100, 100, 100);
   movie = new Movie(this, movieName);
   movie.play();
   movie.speed(speed);
@@ -52,14 +52,10 @@ void draw() {
     return;
 
   fill(255);
-  int mill = millis();
-  int secs = mill / 1000;
-  int mins = secs / 60;
-  String time = nf(mins, 2) + ":" + nf((secs-(mins*60)), 2) +":"+ (mill-secs*1000);
-  text(movieName + " "+ nf(movie.time(), 2, 2) +":" + nf(movie.duration(), 2, 2) + "  ("+ time + ")", 10, 10);
+  timer();
 
   movie.loadPixels();
-  
+
   if (movie.pixels.length == 0) {
     return;
   }
@@ -69,9 +65,9 @@ void draw() {
       gridSize = movieWidth / triggerCount;
     }
   }
-  
-  noFill();
-  int rectWidth = 20;
+
+
+
   for (int i = 0; i < triggerCount; i++) {
     int y = triggerHeight;
     boolean foundTrigger = false;
@@ -84,21 +80,14 @@ void draw() {
         foundTrigger = true;
       }
     }
-    
+
     boolean alreadyTriggered = triggered.get(i);
     if (alreadyTriggered && !foundTrigger) {
       triggered.set(i, false);
     }
     else if (!alreadyTriggered && foundTrigger) {
       if (millis() - lastTriggered.get(i) > delay) {
-        int note = lowNote + i * noteGap;
-        println("triggering " + i + " note: " + note);
-        midi.sendNoteOn(midiChannel, note, 127);
-        lastTriggered.set(i, millis()); 
-        triggered.set(i, true);
-        stroke(0,255,0);
-        fill(255);
-        rect(startx, triggerHeight - rectWidth / 2, gridSize, rectWidth);
+        trigger(startx, i);
       }
     }
   }
@@ -109,12 +98,31 @@ void draw() {
   for (int i = 0; i < triggerCount; i++) {
     int x = i * movieWidth / triggerCount;
     line(x, triggerHeight - 10, x, triggerHeight + 10);
-    text(lowNote + i * noteGap, x + movieWidth/triggerCount/2-5, triggerHeight); 
+    text(lowNote + i * noteGap, x + movieWidth/triggerCount/2-5, triggerHeight);
   }
 
 
   if (movie.time() == movie.duration())
     ended = true;
+}
+
+void trigger(int startx, int n) {
+  int rectWidth = 20;
+  int note = lowNote + n * noteGap;
+  println("triggering " + n + " note: " + note);
+  midi.sendNoteOn(midiChannel, note, 127);
+  lastTriggered.set(n, millis()); 
+  triggered.set(n, true);
+  stroke(0, 255, 0);
+  rect(startx, triggerHeight - rectWidth / 2, gridSize, rectWidth);
+}
+
+void timer() {
+  int mill = millis();
+  int secs = mill / 1000;
+  int mins = secs / 60;
+  String time = nf(mins, 2) + ":" + nf((secs-(mins*60)), 2) +":"+ (mill-secs*1000);
+  text(movieName + " "+ nf(movie.time(), 2, 2) +":" + nf(movie.duration(), 2, 2) + "  ("+ time + ")", 10, 10);
 }
 
 void movieEvent(Movie m) {
@@ -160,9 +168,8 @@ void loadSettings() {
     else if (key.equals("highNote")) {
       highNote = int(val);
     }
-
   }
-  
+
   if (midiDevice == -1) {
     println("Error: No MIDI device specified");
   }
@@ -178,9 +185,8 @@ void loadSettings() {
   if (highNote < lowNote) {
     println("Warning: High note is less than low note");
   }
-  
+
   noteGap = (highNote - lowNote) / triggerCount;
-  
 }
 
 void mousePressed() {
