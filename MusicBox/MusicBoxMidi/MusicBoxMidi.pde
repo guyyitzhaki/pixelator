@@ -9,6 +9,8 @@ int triggerHeight;
 int delay = 0;
 int midiDevice = -1;
 int midiChannel = 0;
+int lowNote = 0;
+int highNote = 127;
 
 int gridSize;
 int movieWidth = -1;
@@ -89,8 +91,9 @@ void draw() {
     }
     else if (!alreadyTriggered && foundTrigger) {
       if (millis() - lastTriggered.get(i) > delay) {
-        println("triggering " + i + " note: " + (i * noteGap));
-        midi.sendNoteOn(midiChannel, i * noteGap, 127);
+        int note = lowNote + i * noteGap;
+        println("triggering " + i + " note: " + note);
+        midi.sendNoteOn(midiChannel, note, 127);
         lastTriggered.set(i, millis()); 
         triggered.set(i, true);
         stroke(0,255,0);
@@ -103,9 +106,10 @@ void draw() {
   stroke(255, 0, 0);
   line(0, triggerHeight, movieWidth, triggerHeight);
 
-  for (int i = 1; i < triggerCount; i++) {
+  for (int i = 0; i < triggerCount; i++) {
     int x = i * movieWidth / triggerCount;
     line(x, triggerHeight - 10, x, triggerHeight + 10);
+    text(lowNote + i * noteGap, x + movieWidth/triggerCount/2-5, triggerHeight); 
   }
 
 
@@ -150,6 +154,12 @@ void loadSettings() {
     else if (key.equals("midiChannel")) {
       midiChannel = int(val);
     }
+    else if (key.equals("lowNote")) {
+      lowNote = int(val);
+    }
+    else if (key.equals("highNote")) {
+      highNote = int(val);
+    }
 
   }
   
@@ -165,9 +175,12 @@ void loadSettings() {
   if (trigger == 0) {
     println("Warning: Trigger value is 0");
   }
+  if (highNote < lowNote) {
+    println("Warning: High note is less than low note");
+  }
   
-  noteGap = 128 / triggerCount;
-
+  noteGap = (highNote - lowNote) / triggerCount;
+  
 }
 
 void mousePressed() {
