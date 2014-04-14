@@ -8,9 +8,11 @@ float speed = 1.0;
 int triggerHeight;
 int delay = 0;
 int midiDevice = -1;
+int midiChannel = 0;
 
 int gridSize;
 int movieWidth = -1;
+int noteGap;
 MidiBus midi; 
 ArrayList<Integer> lastTriggered;
 ArrayList<Boolean> triggered;
@@ -63,7 +65,6 @@ void draw() {
     if (movieWidth == -1) {
       movieWidth = movie.width;
       gridSize = movieWidth / triggerCount;
-      println(movieWidth);
     }
   }
   
@@ -88,8 +89,8 @@ void draw() {
     }
     else if (!alreadyTriggered && foundTrigger) {
       if (millis() - lastTriggered.get(i) > delay) {
-        println("triggered " + i);
-        midi.sendNoteOn(0, i * 8, 127);
+        println("triggering " + i + " note: " + i * noteGap);
+        midi.sendNoteOn(midiChannel, i * noteGap, 127);
         lastTriggered.set(i, millis()); 
         triggered.set(i, true);
         stroke(0,255,0);
@@ -146,6 +147,9 @@ void loadSettings() {
     else if (key.equals("triggerHeight")) {
       triggerHeight = int(val);
     }
+    else if (key.equals("midiChannel")) {
+      midiChannel = int(val);
+    }
 
   }
   
@@ -161,6 +165,8 @@ void loadSettings() {
   if (trigger == 0) {
     println("Warning: Trigger value is 0");
   }
+  
+  noteGap = 128 / triggerCount;
 
 }
 
