@@ -11,6 +11,7 @@ int midiDevice = -1;
 int midiChannel = 0;
 int lowNote = 0;
 int highNote = 127;
+int velocity = 64;
 
 int gridSize;
 int movieWidth = -1;
@@ -110,7 +111,7 @@ void trigger(int startx, int n) {
   int rectWidth = 20;
   int note = lowNote + n * noteGap;
   println("triggering " + n + " note: " + note);
-  midi.sendNoteOn(midiChannel, note, 127);
+  midi.sendNoteOn(midiChannel, note, velocity);
   lastTriggered.set(n, millis()); 
   triggered.set(n, true);
   stroke(0, 255, 0);
@@ -167,6 +168,9 @@ void loadSettings() {
     }
     else if (key.equals("highNote")) {
       highNote = int(val);
+    }
+    else if (key.equals("velocity")) {
+      velocity = int(val);
     }
   }
 
