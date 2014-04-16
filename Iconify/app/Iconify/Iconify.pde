@@ -1,4 +1,5 @@
 import java.util.*;
+import java.awt.print.*;
 import java.io.FilenameFilter;
 
 int APP_WIDTH = 1024;
@@ -141,6 +142,18 @@ void keyPressed() {
   }
   else if (key == 's') {
     canvas.save();
+  }
+  else if (key == 'a') {
+    if (current != null)
+      current.zoomIn();
+  }
+  else if (key == 'z') {
+    if (current != null)
+      current.zoomOut();
+  }
+  else if (key == 'p') {
+    PGraphics img = canvas.getImage();
+    handlePrint(img);
   }
   else if (key == CODED) {
     switch (keyCode) {

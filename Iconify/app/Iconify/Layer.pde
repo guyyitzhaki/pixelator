@@ -28,11 +28,21 @@ class Layer extends Component{
     x--;
   }
   
+  void zoomIn() {
+    w *= 1.1;
+    h *= 1.1;  
+  }
+  
+  void zoomOut() {
+    w *= 0.9;
+    h *= 0.9;  
+  }
+
   void render(int cx, int cy) {
     render(null, cx, cy);
   }
   
     void render(PGraphics gr,int cx, int cy) {
-    element.render(gr, cx+x, cx+y, element.getWidth(), element.getHeight());
+    element.render(gr, cx+x, cx+y, w, h);
   }
 }

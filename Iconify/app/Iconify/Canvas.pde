@@ -58,6 +58,10 @@ class Canvas extends Component {
     popStyle();    
   }
   
+  PGraphics getImage() {
+    return img;
+  }
+  
   void addLayer(Element e, int ex, int ey) {
     Layer l = new Layer(e, ex, ey);
     layers.add(l); 
