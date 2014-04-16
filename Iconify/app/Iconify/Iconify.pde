@@ -28,13 +28,18 @@ Layer current;
 int moveX, moveY;
 boolean moving = false;
 
+PFont engFont;
+
 void setup() {
   size(APP_WIDTH, APP_HEIGHT);
+  
+  engFont = loadFont("Batang-14.vlw");
+  textFont(engFont);
   String[] files = listFileNames(dataPath("icons"), true, "png");
   maxElementHeight = 0;
   for (int i = 0; i < files.length; i++) {
     println("loaded "+files[i]);
-    Element element = new Element(dataPath("icons")+"/"+files[i]);
+    Element element = new ImageElement(dataPath("icons")+"/"+files[i]);
     elements.add(element);
     if (element.getHeight() > maxElementHeight)
       maxElementHeight = element.getHeight();
@@ -150,6 +155,9 @@ void keyPressed() {
   else if (key == 'z') {
     if (current != null)
       current.zoomOut();
+  }
+  else if (key == 'F') {
+    canvas.addLayer(new TextElement("Hello"), mouseX - CANVAS_X , mouseY - CANVAS_Y);
   }
   else if (key == 'p') {
     PGraphics img = canvas.getImage();
