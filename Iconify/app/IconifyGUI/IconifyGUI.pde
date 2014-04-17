@@ -2,8 +2,8 @@ import java.util.*;
 import java.awt.print.*;
 import java.io.FilenameFilter;
 
-int ELEMENT_START_X = 145;
-int ELEMENT_START_Y = 147;
+int ELEMENT_START_X = 150;
+int ELEMENT_START_Y = 150;
 int ELEMENT_GAP = 10;
 int ELEMENT_RATIO = 6;
 
@@ -35,40 +35,60 @@ void setup() {
   iconList = new ImageButtonList(ELEMENT_START_X, ELEMENT_START_Y, listWidth, 90, "icons", ELEMENT_RATIO);  
   bgList = new ImageButtonList(ELEMENT_START_X, ELEMENT_START_Y, listWidth, 90, "backgrounds", ELEMENT_RATIO);  
   canvas = new Canvas(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT);
-  
-  ImageButton zoomIn = new ImageButton("plus.png", 215, CANVAS_Y + 5) {
-      public void mousePressed() {
-        if (current != null)
-          current.zoomIn();
-      }
-    };
-  ImageButton zoomOut = new ImageButton("minus.png", 215, CANVAS_Y + zoomIn.getHeight() + 15) {
-      public void mousePressed() {
-        if (current != null)
-          current.zoomOut();
-      }
-    };
-    
-   ImageButton backgrounds = new ImageButton("minus.png", 910, 120) {
-      public void mousePressed() {
-        iconList.setEnabled(false);
-        bgList.setEnabled(true);
-      }
-    }; 
-    ImageButton elements = new ImageButton("minus.png", 910, 180) {
-      public void mousePressed() {
-        iconList.setEnabled(true);
-        bgList.setEnabled(false);
-      }
-    }; 
-    ImageButton text = new ImageButton("minus.png", 910, 240) {
-      public void mousePressed() {
-        iconList.setEnabled(false);
-        bgList.setEnabled(false);
-      }
-    }; 
-  iconList.setEnabled(false);
 
+  ImageButton zoomIn = new ImageButton("plus.png", 215, CANVAS_Y + 5) {
+    public void mousePressed() {
+      if (current != null)
+        current.zoomIn();
+    }
+  };
+  ImageButton zoomOut = new ImageButton("minus.png", 215, CANVAS_Y + zoomIn.getHeight() + 15) {
+    public void mousePressed() {
+      if (current != null)
+        current.zoomOut();
+    }
+  };
+
+  ImageButton backgrounds = new ImageButton("minus.png", 910, 120) {
+    public void mousePressed() {
+      iconList.setEnabled(false);
+      bgList.setEnabled(true);
+    }
+  }; 
+  ImageButton elements = new ImageButton("minus.png", 910, 180) {
+    public void mousePressed() {
+      iconList.setEnabled(true);
+      bgList.setEnabled(false);
+    }
+  }; 
+  ImageButton text = new ImageButton("minus.png", 910, 240) {
+    public void mousePressed() {
+      iconList.setEnabled(false);
+      bgList.setEnabled(false);
+    }
+  }; 
+  ImageButton clear = new ImageButton("minus.png", CANVAS_X+CANVAS_WIDTH+30, height - 100) {
+    public void mousePressed() {
+      canvas.clear();
+    }
+  }; 
+  ImageButton print = new ImageButton("minus.png", CANVAS_X-30-40, height - 100) {
+    public void mousePressed() {
+      if (!canvas.isEmpty()) {
+        PGraphics img = canvas.getImage();
+        handlePrint(img);
+      }
+
+    }
+  }; 
+  ImageButton save = new ImageButton("minus.png", CANVAS_X-30-40, height - 150) {
+    public void mousePressed() {
+      if (!canvas.isEmpty()) {
+        canvas.save();
+      }
+    }
+  }; 
+  iconList.setEnabled(false);
 }
 
 boolean sketchFullScreen() {
@@ -77,7 +97,7 @@ boolean sketchFullScreen() {
 
 void draw() {
   image(bgImage, 0, 0);
-  
+
   for (Component c : components) {
     if (c.isEnabled())
       c.render();
@@ -97,8 +117,8 @@ void draw() {
       return;
     current.place(changeX-CANVAS_X, changeY-CANVAS_Y);
   }
-  
-  text(mouseX + "," + mouseY, 10,10);
+
+  text(mouseX + "," + mouseY, 10, 10);
 }
 
 void mousePressed() {

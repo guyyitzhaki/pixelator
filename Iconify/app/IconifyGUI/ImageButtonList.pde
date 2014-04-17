@@ -60,7 +60,7 @@ class ImageButtonList extends Component {
   void render() {
     pushStyle();
     fill(255);
-    stroke(128s);
+    stroke(128);
     rect(x + leftButton.getWidth() + 10, y, w - 2 * (leftButton.getWidth()+10), h);
     popStyle();
   }
