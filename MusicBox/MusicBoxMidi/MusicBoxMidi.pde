@@ -24,7 +24,7 @@ boolean paused = false;
 boolean ended = false;
 
 void setup() {
-  size(1024, 768);
+  size(1920, 1080);
   MidiBus.list();
   triggerHeight = height / 2;
 
@@ -85,6 +85,9 @@ void draw() {
     boolean alreadyTriggered = triggered.get(i);
     if (alreadyTriggered && !foundTrigger) {
       triggered.set(i, false);
+      int note = lowNote + i * noteGap;
+      midi.sendNoteOff(midiChannel, note, velocity);
+      println("noteoff: "+i+" " + note);
     }
     else if (!alreadyTriggered && foundTrigger) {
       if (millis() - lastTriggered.get(i) > delay) {

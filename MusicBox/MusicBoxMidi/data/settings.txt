@@ -1,9 +1,9 @@
 movie test.mov
 speed 1.0
 midiDevice 1
-midiChannel 0
+midiChannel 3
 lowNote 0
-highNote 110
+highNote 11
 velocity 64
 triggerCount 11
 trigger 200
