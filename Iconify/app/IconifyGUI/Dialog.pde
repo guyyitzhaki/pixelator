@@ -1,4 +1,4 @@
-class Dialog extends Component {
+class Dialog extends Container {
   String msg;
   TextButton ok;
   
@@ -10,6 +10,7 @@ class Dialog extends Component {
         close();
       }
     };
+    addChild(ok);
   }
   
   void render() {
@@ -19,15 +20,14 @@ class Dialog extends Component {
     strokeWeight(5);
     rect(x,y,w,h);
     fill(0);
-    text(msg, x + w / 2 - 20, y  + h  /  3);
+    text(msg, x + w / 2 - 18, y  + h  /  3);
     rect(x, y + h - 40, w, 40);
     popStyle();
     ok.render();
   }
   
   void close() {
-    components.remove(this);
-    components.remove(ok);
+    dispose();
   }
   
   

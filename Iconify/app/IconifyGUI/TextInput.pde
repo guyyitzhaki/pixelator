@@ -20,7 +20,7 @@ class TextInput extends Container {
       buttonx += 22;
     }
 
-    TextButton spc = new TextButton("_", buttonx, y, 18, 30) {
+    TextButton spc = new TextButton(" ", buttonx, y, 18, 30) {
       void mousePressed() {
         value.setText(value.getText() + " ");
       }
@@ -31,7 +31,7 @@ class TextInput extends Container {
     value = new TextButton("", x + 10, y + 50, 300, 30);
     addChild(value);
 
-    clear = new TextButton("CLEAR", x + 330, y + 50, 50, 30) {
+    clear = new TextButton("CLR", x + 330, y + 50, 50, 30) {
       void mousePressed() {
         value.setText("");
       }
@@ -53,7 +53,7 @@ class TextInput extends Container {
         int len = value.getText().length();
         if (len > 0) {
           current = canvas.addLayer(new TextLayer(value.getText(), canvas.getWidth() / 2, canvas.getHeight() / 2, 16));
-          value.setText("");
+          value.setText("|");
         }
       }
     };
@@ -62,7 +62,7 @@ class TextInput extends Container {
   }
 
   void setBtnParams(TextButton b) {
-    b.setHGap(3);
+    b.setHGap(4);
     b.setVGap(5);
     btns.add(b);
     addChild(b);

@@ -19,10 +19,10 @@ class TextButton extends Component {
   
   void render() {
     pushStyle();
-    fill(0);
-    stroke(255);
-    rect(x,y,w,h);
     fill(255);
+    stroke(0);
+    rect(x,y,w,h);
+    fill(0);
     text(text, x + hgap, y + h/2 + vgap);
     popStyle();
   }

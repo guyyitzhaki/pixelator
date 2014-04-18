@@ -22,7 +22,7 @@ void setup() {
   size(1024, 768);
   bgImage = loadImage("main.png");
 
-  engFont = loadFont("Arial-Black-16.vlw");
+  engFont = loadFont("Monospaced-16.vlw");
   textFont(engFont);
   float listWidth = width - 300;
   int listX = 150;
@@ -31,7 +31,7 @@ void setup() {
 
   iconList = new ImageButtonList(listX, listY, listWidth, 90, "elements", elementRatio);  
   bgList = new ImageButtonList(listX, listY, listWidth, 90, "backgrounds", elementRatio);  
-  textInput = new TextInput(listX + 40, listY, listWidth, 90);
+  textInput = new TextInput(listX + 60, listY, listWidth, 90);
 
   int canvasWidth = 450;
   int canvasHeight = 450;

@@ -7,10 +7,11 @@ class Canvas extends Component {
   Canvas(int x, int y, int w, int h) {
     super(x, y, w, h);
     img = createGraphics(w, h);
+    PFont font = loadFont("Monospaced-48.vlw");
     img.beginDraw();
     img.background(color(255));
     img.textAlign(LEFT, TOP);
-    img.textFont(engFont);
+    img.textFont(font);
     img.endDraw();
     
   }
