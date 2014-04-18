@@ -1,12 +1,21 @@
 class TextButton extends Component {
   String text;
-  
+  int hgap = 15;
+  int vgap = 5;
 
   TextButton(String txt, float x, float y, float w, float h) {
     super(x,y,w,h);
     setId(txt);
-    text= txt;
+    text = txt;
    } 
+   
+   void setHGap(int val) {
+     hgap = val;
+   }
+   
+   void setVGap(int val) {
+     vgap = val;
+   }   
   
   void render() {
     pushStyle();
@@ -14,8 +23,16 @@ class TextButton extends Component {
     stroke(255);
     rect(x,y,w,h);
     fill(255);
-    text(text, x + 15, y + h/2+5);
+    text(text, x + hgap, y + h/2 + vgap);
     popStyle();
+  }
+  
+  void setText(String txt) {
+    text = txt;
+  }
+  
+  String getText() {
+    return text;
   }
 }
 

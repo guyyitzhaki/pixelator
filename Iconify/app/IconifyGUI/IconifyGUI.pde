@@ -7,6 +7,7 @@ boolean debug = true;
 PImage bgImage;
 ImageButtonList iconList;
 ImageButtonList bgList;
+TextInput textInput;
 
 int canvasX, canvasY;
 Canvas canvas;
@@ -28,8 +29,9 @@ void setup() {
   int listY = 150;
   int elementRatio = 6;
 
-  iconList = new ImageButtonList(listX, listY, listWidth, 90, "icons", elementRatio);  
+  iconList = new ImageButtonList(listX, listY, listWidth, 90, "elements", elementRatio);  
   bgList = new ImageButtonList(listX, listY, listWidth, 90, "backgrounds", elementRatio);  
+  textInput = new TextInput(listX + 40, listY, listWidth, 90);
 
   int canvasWidth = 450;
   int canvasHeight = 450;
@@ -54,18 +56,21 @@ void setup() {
     public void mousePressed() {
       iconList.setEnabled(false);
       bgList.setEnabled(true);
+      textInput.setEnabled(false);
     }
   }; 
   ImageButton elements = new ImageButton("buttons/elements.png", 910, 175) {
     public void mousePressed() {
       iconList.setEnabled(true);
       bgList.setEnabled(false);
+      textInput.setEnabled(false);
     }
   }; 
   ImageButton text = new ImageButton("buttons/text.png", 910, 230) {
     public void mousePressed() {
       iconList.setEnabled(false);
       bgList.setEnabled(false);
+      textInput.setEnabled(true);
     }
   }; 
   ImageButton clear = new ImageButton("buttons/trash.png", canvasX+canvasWidth+25, height - 90) {
@@ -76,22 +81,22 @@ void setup() {
   ImageButton print = new ImageButton("buttons/print.png", canvasX-75, height - 160) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
-        Dialog printing = new Dialog("Printing...", 400,300);
+        Dialog printing = new Dialog("Printing...", 400, 300);
         PGraphics img = canvas.getImage();
         handlePrint(img);
       }
-
     }
   }; 
   ImageButton save = new ImageButton("buttons/save.png", canvasX-75, height - 90) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
-        Dialog save = new Dialog("Save", 400,300);
+        Dialog save = new Dialog("Save", 400, 300);
         canvas.save();
       }
     }
   }; 
   iconList.setEnabled(false);
+  textInput.setEnabled(false);
 }
 
 boolean sketchFullScreen() {

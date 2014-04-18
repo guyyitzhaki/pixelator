@@ -26,7 +26,6 @@ class Dialog extends Component {
   }
   
   void close() {
-    // remember to remove children too
     components.remove(this);
     components.remove(ok);
   }

@@ -1,10 +1,10 @@
-class ImageButtonList extends Component {
+class ImageButtonList extends Container {
   ArrayList<ImageButton> icons = new ArrayList<ImageButton>();
   ArrayList<ImageButton> displayed = new ArrayList<ImageButton>();
   ImageButton leftButton, rightButton;
   int startIndex;
   int iconNum;
-  
+
   String id;
 
   ImageButtonList(float _x, float _y, float _w, float _h, String path, float ratio) {
@@ -20,6 +20,8 @@ class ImageButtonList extends Component {
         moveRight();
       }
     };
+    addChild(leftButton);
+    addChild(rightButton);
     String[] files = listFileNames(dataPath(path), true, "png");
     float icony = _y;
     for (int i = 0; i < files.length; i++) {
@@ -27,6 +29,7 @@ class ImageButtonList extends Component {
         println("loaded "+files[i]);
       ImageButton icon = new IconButton(dataPath(path)+"/"+files[i], 0, _y+15, ratio);
       icons.add(icon);
+      addChild(icon);
     }
 
     startIndex = 0;
@@ -45,14 +48,10 @@ class ImageButtonList extends Component {
       startIndex--;
     updateDisplayedIcons();
   }
-  
+
   void setEnabled(boolean val) {
     super.setEnabled(val);
-    leftButton.setEnabled(val);
-    rightButton.setEnabled(val);
-    for(ImageButton b : icons) {
-      b.setEnabled(val);
-    }
+    
     if (val) {
       updateDisplayedIcons();
     }
@@ -83,9 +82,8 @@ class ImageButtonList extends Component {
       }
     }
 
-      leftButton.setEnabled(!(startIndex == 0));
+    leftButton.setEnabled(!(startIndex == 0));
     rightButton.setEnabled(!(startIndex + iconNum >= icons.size()));
-    
   }
 }
 

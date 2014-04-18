@@ -9,6 +9,7 @@ class Canvas extends Component {
     img = createGraphics(w, h);
     img.beginDraw();
     img.background(color(255));
+    img.textAlign(LEFT, TOP);
     img.textFont(engFont);
     img.endDraw();
     

@@ -66,13 +66,12 @@ class TextLayer extends Layer {
   String str;
 
    TextLayer(String s, float x, float y) {
-     super(x, y, s.length() * 10, 12);
+     super(x, y, s.length() * 14, 16);
      this.str = s;
      
    }
   
   void render(PGraphics gr,float cx, float cy) {
-    
     if (gr == null) {
       pushStyle();
       fill(0);
@@ -83,6 +82,11 @@ class TextLayer extends Layer {
       gr.pushStyle();
       gr.fill(0);
       gr.text(str, cx+x, cy+y);
+      if (debug) {
+        gr.noFill();
+        gr.stroke(255,0,0);
+        gr.rect(cx+x,cy+y,w,h);
+      }
       gr.popStyle();
     }
     
