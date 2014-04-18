@@ -10,12 +10,12 @@ class ImageButtonList extends Component {
   ImageButtonList(float _x, float _y, float _w, float _h, String path, float ratio) {
     super(_x, _y, _w, _h);
     id = path;
-    leftButton = new ImageButton("left.jpg", _x, _y+15) {
+    leftButton = new ImageButton("buttons/arrow-left.png", _x, _y+10) {
       void mousePressed() {
         moveLeft();
       }
     };
-    rightButton = new ImageButton("right.jpg", _x+_w-leftButton.getWidth(), _y+15) {
+    rightButton = new ImageButton("buttons/arrow-right.png", _x+_w-leftButton.getWidth(), _y+10) {
       void mousePressed() {
         moveRight();
       }

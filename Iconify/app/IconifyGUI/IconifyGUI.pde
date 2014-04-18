@@ -36,43 +36,43 @@ void setup() {
   bgList = new ImageButtonList(ELEMENT_START_X, ELEMENT_START_Y, listWidth, 90, "backgrounds", ELEMENT_RATIO);  
   canvas = new Canvas(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  ImageButton zoomIn = new ImageButton("plus.png", 215, CANVAS_Y + 5) {
+  ImageButton zoomIn = new ImageButton("buttons/plus.png", 211, CANVAS_Y) {
     public void mousePressed() {
       if (current != null)
         current.zoomIn();
     }
   };
-  ImageButton zoomOut = new ImageButton("minus.png", 215, CANVAS_Y + zoomIn.getHeight() + 15) {
+  ImageButton zoomOut = new ImageButton("buttons/minus.png", 211, CANVAS_Y + zoomIn.getHeight() + 10) {
     public void mousePressed() {
       if (current != null)
         current.zoomOut();
     }
   };
 
-  ImageButton backgrounds = new ImageButton("minus.png", 910, 120) {
+  ImageButton backgrounds = new ImageButton("buttons/background.png", 910, 120) {
     public void mousePressed() {
       iconList.setEnabled(false);
       bgList.setEnabled(true);
     }
   }; 
-  ImageButton elements = new ImageButton("minus.png", 910, 180) {
+  ImageButton elements = new ImageButton("buttons/elements.png", 910, 175) {
     public void mousePressed() {
       iconList.setEnabled(true);
       bgList.setEnabled(false);
     }
   }; 
-  ImageButton text = new ImageButton("minus.png", 910, 240) {
+  ImageButton text = new ImageButton("buttons/text.png", 910, 230) {
     public void mousePressed() {
       iconList.setEnabled(false);
       bgList.setEnabled(false);
     }
   }; 
-  ImageButton clear = new ImageButton("minus.png", CANVAS_X+CANVAS_WIDTH+30, height - 100) {
+  ImageButton clear = new ImageButton("buttons/trash.png", CANVAS_X+CANVAS_WIDTH+25, height - 90) {
     public void mousePressed() {
       canvas.clear();
     }
   }; 
-  ImageButton print = new ImageButton("minus.png", CANVAS_X-30-40, height - 100) {
+  ImageButton print = new ImageButton("buttons/print.png", CANVAS_X-75, height - 160) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
         PGraphics img = canvas.getImage();
@@ -81,7 +81,7 @@ void setup() {
 
     }
   }; 
-  ImageButton save = new ImageButton("minus.png", CANVAS_X-30-40, height - 150) {
+  ImageButton save = new ImageButton("buttons/save.png", CANVAS_X-75, height - 90) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
         canvas.save();
