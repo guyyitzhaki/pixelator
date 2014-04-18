@@ -24,7 +24,7 @@ void handlePrint(final PGraphics img) {
       switch (pageIndex)
       {
       case 0 :
-        graphics.drawImage(img.image, 200, 200, img.width, img.height, null);
+        graphics.drawImage(img.image, 50, 50, img.width, img.height, null);
         return Printable.PAGE_EXISTS;
       default: 
         return NO_SUCH_PAGE;        // No other pages left

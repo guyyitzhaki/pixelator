@@ -18,15 +18,14 @@ class TextElement extends Element {
   
   TextElement(String s) {
     txt = s;
-    println("added "+txt);
   }
   
   int getWidth() {
-    return CANVAS_WIDTH;
+    return 450;
   }
   
   int getHeight() {
-    return CANVAS_WIDTH;
+    return 450;
   }
   
   void render(PGraphics gr, float x, float y, float w, float h) {

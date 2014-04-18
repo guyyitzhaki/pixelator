@@ -3,6 +3,8 @@ ArrayList<Component> components = new ArrayList<Component>();
 class Component {
   float x,y,w,h;
   boolean enabled = true;
+  String id;
+
   
   Component(float _x, float _y, float _w, float _h) {
     this(_x, _y,_w,_h,true);
@@ -18,6 +20,10 @@ class Component {
       components.add(this);
   }
   
+  void setId(String id) {
+    this.id = id;
+  }
+  
   void setX(float x){
     this.x = x;
   }
@@ -25,7 +31,15 @@ class Component {
   void setY(float y){
     this.y = y;
   }
-
+  
+  float getX() {
+    return x;
+  }
+  
+  float getY() {
+    return y;
+  }
+  
   void setWidth(float w) {
     this.w = w;
   }
@@ -62,6 +76,10 @@ class Component {
   }
   
   void mouseReleased() {
+  }
+  
+  void dispose() {
+    components.remove(this);
   }
 
 }

@@ -6,5 +6,8 @@ class IconButton extends ImageButton {
    void mousePressed() {
     dragged = img;
   }
+   void mouseReleased() {
+    dragged = null;
+  }
 
 }

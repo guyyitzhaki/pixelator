@@ -2,19 +2,13 @@ import java.util.*;
 import java.awt.print.*;
 import java.io.FilenameFilter;
 
-int ELEMENT_START_X = 150;
-int ELEMENT_START_Y = 150;
-int ELEMENT_GAP = 10;
-int ELEMENT_RATIO = 6;
-
-int CANVAS_WIDTH = 450;
-int CANVAS_HEIGHT = 450;
-int CANVAS_X, CANVAS_Y;
+boolean debug = true;
 
 PImage bgImage;
 ImageButtonList iconList;
 ImageButtonList bgList;
 
+int canvasX, canvasY;
 Canvas canvas;
 PImage dragged;
 
@@ -26,23 +20,30 @@ PFont engFont;
 void setup() {
   size(1024, 768);
   bgImage = loadImage("main.png");
-  CANVAS_X = width / 2  - CANVAS_WIDTH / 2;
-  CANVAS_Y = height - 40 - CANVAS_HEIGHT;
 
   engFont = loadFont("Arial-Black-16.vlw");
   textFont(engFont);
   float listWidth = width - 300;
-  iconList = new ImageButtonList(ELEMENT_START_X, ELEMENT_START_Y, listWidth, 90, "icons", ELEMENT_RATIO);  
-  bgList = new ImageButtonList(ELEMENT_START_X, ELEMENT_START_Y, listWidth, 90, "backgrounds", ELEMENT_RATIO);  
-  canvas = new Canvas(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT);
+  int listX = 150;
+  int listY = 150;
+  int elementRatio = 6;
 
-  ImageButton zoomIn = new ImageButton("buttons/plus.png", 211, CANVAS_Y) {
+  iconList = new ImageButtonList(listX, listY, listWidth, 90, "icons", elementRatio);  
+  bgList = new ImageButtonList(listX, listY, listWidth, 90, "backgrounds", elementRatio);  
+
+  int canvasWidth = 450;
+  int canvasHeight = 450;
+  canvasX = width / 2  - canvasWidth / 2;
+  canvasY = height - 40 - canvasHeight;
+  canvas = new Canvas(canvasX, canvasY, canvasWidth, canvasHeight);
+
+  ImageButton zoomIn = new ImageButton("buttons/plus.png", 211, canvasY) {
     public void mousePressed() {
       if (current != null)
         current.zoomIn();
     }
   };
-  ImageButton zoomOut = new ImageButton("buttons/minus.png", 211, CANVAS_Y + zoomIn.getHeight() + 10) {
+  ImageButton zoomOut = new ImageButton("buttons/minus.png", 211, canvasY + zoomIn.getHeight() + 10) {
     public void mousePressed() {
       if (current != null)
         current.zoomOut();
@@ -67,23 +68,25 @@ void setup() {
       bgList.setEnabled(false);
     }
   }; 
-  ImageButton clear = new ImageButton("buttons/trash.png", CANVAS_X+CANVAS_WIDTH+25, height - 90) {
+  ImageButton clear = new ImageButton("buttons/trash.png", canvasX+canvasWidth+25, height - 90) {
     public void mousePressed() {
       canvas.clear();
     }
   }; 
-  ImageButton print = new ImageButton("buttons/print.png", CANVAS_X-75, height - 160) {
+  ImageButton print = new ImageButton("buttons/print.png", canvasX-75, height - 160) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
+        Dialog printing = new Dialog("Printing...", 400,300);
         PGraphics img = canvas.getImage();
         handlePrint(img);
       }
 
     }
   }; 
-  ImageButton save = new ImageButton("buttons/save.png", CANVAS_X-75, height - 90) {
+  ImageButton save = new ImageButton("buttons/save.png", canvasX-75, height - 90) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
+        Dialog save = new Dialog("Save", 400,300);
         canvas.save();
       }
     }
@@ -115,14 +118,15 @@ void draw() {
     float changeY = mouseY - moveY;
     if (current == null)
       return;
-    current.place(changeX-CANVAS_X, changeY-CANVAS_Y);
+    current.place(changeX-canvasX, changeY-canvasY);
   }
-
-  text(mouseX + "," + mouseY, 10, 10);
+  if (debug)
+    text(mouseX + "," + mouseY, 10, 10);
 }
 
 void mousePressed() {
-  for (Component component : components) {
+  ArrayList<Component> all = new ArrayList<Component>(components);
+  for (Component component : all) {
     if (component.isEnabled() && component.isInside(mouseX, mouseY)) {
       component.mousePressed();
     }
@@ -130,7 +134,8 @@ void mousePressed() {
 }
 
 void mouseReleased() {
-  for (Component component : components) {
+  ArrayList<Component> all = new ArrayList<Component>(components);
+  for (Component component : all) {
     if (component.isEnabled() && component.isInside(mouseX, mouseY)) {
       component.mouseReleased();
     }
@@ -159,7 +164,7 @@ void keyPressed() {
       current.zoomOut();
   }
   else if (key == 'F') { // DEBUG
-    canvas.addLayer(new TextLayer("Hi", mouseX - CANVAS_X, mouseY - CANVAS_Y));
+    canvas.addLayer(new TextLayer("Hi", mouseX - canvasX, mouseY - canvasY));
   }
   else if (key == 'p') {
     PGraphics img = canvas.getImage();

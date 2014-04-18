@@ -23,7 +23,8 @@ class ImageButtonList extends Component {
     String[] files = listFileNames(dataPath(path), true, "png");
     float icony = _y;
     for (int i = 0; i < files.length; i++) {
-      println("loaded "+files[i]);
+      if (debug)
+        println("loaded "+files[i]);
       ImageButton icon = new IconButton(dataPath(path)+"/"+files[i], 0, _y+15, ratio);
       icons.add(icon);
     }
@@ -66,6 +67,7 @@ class ImageButtonList extends Component {
   }
 
   void updateDisplayedIcons() {
+    int ELEMENT_GAP = 10;
     displayed.clear();
     float iconx = x + leftButton.getWidth() + 10;
     for (int i = 0; i < icons.size(); i++) {
@@ -80,6 +82,10 @@ class ImageButtonList extends Component {
         icon.setEnabled(false);
       }
     }
+
+      leftButton.setEnabled(!(startIndex == 0));
+    rightButton.setEnabled(!(startIndex + iconNum >= icons.size()));
+    
   }
 }
 
