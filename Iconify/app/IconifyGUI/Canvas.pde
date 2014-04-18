@@ -3,7 +3,7 @@ class Canvas extends Component {
   PGraphics img;
   color bg;
   boolean select;
-  
+
   Canvas(int x, int y, int w, int h) {
     super(x, y, w, h);
     img = createGraphics(w, h);
@@ -13,17 +13,16 @@ class Canvas extends Component {
     img.textAlign(LEFT, TOP);
     img.textFont(font);
     img.endDraw();
-    
   }
-  
+
   void setBackground(color c) {
     bg = c;
   }
-  
+
   boolean isEmpty() {
     return layers.isEmpty();
   }
-  
+
   void moveLayerUp() {
     layers.get(layers.size()-1).moveUp();
   }
@@ -39,95 +38,85 @@ class Canvas extends Component {
   void moveLayerLeft() {
     layers.get(layers.size()-1).moveLeft();
   }
-  
+
   void render() {
     img.beginDraw();
     img.background(255);
     for (Layer l : layers) {
-      l.render(img, 0,0);
+      l.render(img, 0, 0);
     }
     if (select && !layers.isEmpty()) {
       Layer l = topLayer();
       img.stroke(0);
       img.noFill();
-      img.rect(l.x,l.y,l.w,l.h);
+      img.rect(l.x, l.y, l.w, l.h);
     }
     img.endDraw();
-    image(img, x,y);
+    image(img, x, y);
     pushStyle();
     stroke(128);
     noFill();
-    rect(x,y,w,h);
-    popStyle();    
+    rect(x, y, w, h);
+    popStyle();
   }
-  
+
   PGraphics getImage() {
     return img;
   }
-  
+
   Layer addLayer(Layer l) {
     layers.add(l); 
     return l;
   }
-  
+
   void clear() {
     layers.clear();
   }
-  
+
   void removeLast() {
     if (!layers.isEmpty()) {
       layers.remove(layers.size() - 1);
     }
   }
-  
+
   Layer topLayer() {
     if (layers.isEmpty())
       return null;
-    return layers.get(layers.size()-1);  
+    return layers.get(layers.size()-1);
   }
-  
+
   Layer getLayerAt(float x, float y) {
     for (int i = layers.size()-1; i >= 0; i--) {
       Layer l = layers.get(i);
-      if (l.isInside(x,y)) {
+      if (l.isInside(x, y)) {
         return l;
-      }  
+      }
     }
     return null;
   }
-  
+
   void save() {
- //   select = false;
+    //   select = false;
     render();
     img.save("output.png");  
-//    select = true;  
+    //    select = true;
   }
-  
-  void mousePressed() {
-      Layer l = getLayerAt(mouseX - x, mouseY - y);
-      current = l;
-     // Layer l = canvas.topLayer(); 
-      if (l == null)
-        return;
-      moveX = mouseX - x - l.x;
-      moveY = mouseY - y - l.y;
-      moving = true;
 
+  void mousePressed() {
+    Layer l = getLayerAt(mouseX - x, mouseY - y);
+    current = l;
+    if (l == null)
+      return;
+    moveX = mouseX - x - l.x;
+    moveY = mouseY - y - l.y;
+    moving = true;
   }
-  
+
   void mouseReleased() {
     if (dragged != null) {
       current = addLayer(new ImageLayer(dragged, mouseX - x - dragged.width/2, mouseY - y - dragged.height/2));
-    
-  }
+    }
     dragged = null;
-    
-  
-
   }
-  
-  
-  
-  
 }
 

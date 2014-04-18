@@ -12,18 +12,16 @@ TextInput textInput;
 int canvasX, canvasY;
 Canvas canvas;
 PImage dragged;
-
 Layer current;
 float moveX, moveY;
 boolean moving = false;
-PFont engFont;
 
 void setup() {
   size(1024, 768);
   bgImage = loadImage("main.png");
 
-  engFont = loadFont("Monospaced-16.vlw");
-  textFont(engFont);
+  PFont font = loadFont("Monospaced-16.vlw");
+  textFont(font);
   float listWidth = width - 300;
   int listX = 150;
   int listY = 150;
@@ -159,21 +157,6 @@ void keyPressed() {
   }
   else if (key == 's') {
     canvas.save();
-  }
-  else if (key == 'a') {
-    if (current != null)
-      current.zoomIn();
-  }
-  else if (key == 'z') {
-    if (current != null)
-      current.zoomOut();
-  }
-  else if (key == 'F') { // DEBUG
-    canvas.addLayer(new TextLayer("Hi", mouseX - canvasX, mouseY - canvasY, 16));
-  }
-  else if (key == 'p') {
-    PGraphics img = canvas.getImage();
-    handlePrint(img);
   }
   else if (key == CODED) {
     switch (keyCode) {

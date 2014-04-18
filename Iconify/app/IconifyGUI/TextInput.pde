@@ -3,30 +3,12 @@ class TextInput extends Container {
   ArrayList<TextButton> btns = new ArrayList<TextButton>(); 
 
   TextButton value;
-  TextButton clear, add, del;
+  TextButton clear, add, del, heb, eng;
 
   TextInput(float _x, float _y, float _w, float _h) {
     super(_x, _y, _w, _h);
 
-    float buttonx = x + 10;
-    for (int i = 'A'; i <= 'Z'; i++) {
-      TextButton b = new TextButton(""+char(i), buttonx, y, 18, 30) {
-        void mousePressed() {
-          value.setText(value.getText() + getId());
-        }
-      };
-      setBtnParams(b);
-
-      buttonx += 22;
-    }
-
-    TextButton spc = new TextButton(" ", buttonx, y, 18, 30) {
-      void mousePressed() {
-        value.setText(value.getText() + " ");
-      }
-    };
-    setBtnParams(spc);
-    buttonx += 22;
+    setEnglish();
 
     value = new TextButton("", x + 10, y + 50, 300, 30);
     addChild(value);
@@ -59,6 +41,60 @@ class TextInput extends Container {
     };
     add.setHGap(3);
     addChild(add);
+    
+    heb = new TextButton("HEB", x + 540, y + 50, 50, 30) {
+      void mousePressed() {
+        setHebrew();
+      }
+    };
+    heb.setHGap(3);
+    addChild(heb);
+    
+    eng = new TextButton("ENG", x + 610, y + 50, 50, 30) {
+      void mousePressed() {
+        setEnglish();
+      }
+    };
+    eng.setHGap(3);
+    addChild(eng);
+  }
+  
+  void setEnglish() {
+    setLanguage('A', 'Z', true);
+  }
+  
+  void setHebrew() {
+    setLanguage('א', 'ת', false);
+  }
+  
+  void setLanguage(char start, char end, final boolean ltor) {
+    if (children != null)
+      children.removeAll(btns);
+    for (TextButton b : btns) {
+      b.dispose();
+    }
+    btns.clear();
+    float buttonx = x + 10;
+    for (int i = start; i <= end; i++) {
+      TextButton b = new TextButton(""+char(i), buttonx, y, 18, 30) {
+        public void mousePressed() {
+          String newval = ltor ? value.getText() + getId() : getId() + value.getText();
+          value.setText(newval);
+        }
+      };
+      setBtnParams(b);
+
+      buttonx += 22;
+    }
+
+    TextButton spc = new TextButton(" ", buttonx, y, 18, 30) {
+      public void mousePressed() {
+          String newval = ltor ? value.getText() + " " : " " + value.getText();
+      }
+    };
+    setBtnParams(spc);
+    buttonx += 22;
+
   }
 
   void setBtnParams(TextButton b) {
