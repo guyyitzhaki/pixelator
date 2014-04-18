@@ -1,15 +1,15 @@
-abstract class Layer extends Component{
+abstract class Layer extends Component {
 
-  
+
   Layer(float x, float y, float w, float h) {
     super(x, y, w, h, false);
   }
-  
+
   void place(float newx, float newy) {
     x = newx;
     y = newy;
   }
-  
+
   void moveUp() {
     y--;
   }
@@ -25,71 +25,69 @@ abstract class Layer extends Component{
   void moveLeft() {
     x--;
   }
-  
+
   void zoomIn() {
     w *= 1.1;
-    h *= 1.1;  
+    h *= 1.1;
   }
-  
+
   void zoomOut() {
     w *= 0.9;
-    h *= 0.9;  
+    h *= 0.9;
   }
 
-  void render(int cx, int cy) {
-    render(null, cx, cy);
-  }
-  
-  abstract void render(PGraphics gr,float cx, float cy);
 
+
+  abstract void render(PGraphics gr, float cx, float cy);
 }
 
 
 class ImageLayer extends Layer {
-    PImage img;
-   ImageLayer(PImage i, float x, float y) {
+  PImage img;
+  ImageLayer(PImage i, float x, float y) {
     super(x, y, i.width, i.height);
     img = i;
-    
   }
 
-  
-  void render(PGraphics gr,float cx, float cy) {
-    if (gr == null)
-      image(img, cx+x, cy+y, w ,h);
-    else  
-      gr.image(img, cx+x, cy+y, w ,h);
+
+  void render(PGraphics gr, float cx, float cy) { 
+    gr.image(img, cx+x, cy+y, w, h);
   }
 }
 
 class TextLayer extends Layer {
   String str;
+  int textSize;
 
-   TextLayer(String s, float x, float y) {
-     super(x, y, s.length() * 14, 16);
-     this.str = s;
-     
-   }
+  TextLayer(String s, float x, float y, int textSize) {
+    super(x, y, s.length() * (textSize - 2), textSize);
+    this.str = s;
+    this.textSize = textSize;
+  }
   
-  void render(PGraphics gr,float cx, float cy) {
-    if (gr == null) {
-      pushStyle();
-      fill(0);
-      text(str, cx+x, cy+y);
-      popStyle();
-    }
-    else  {
-      gr.pushStyle();
-      gr.fill(0);
-      gr.text(str, cx+x, cy+y);
-      if (debug) {
-        gr.noFill();
-        gr.stroke(255,0,0);
-        gr.rect(cx+x,cy+y,w,h);
-      }
-      gr.popStyle();
-    }
-    
+  void zoomIn() {
+    textSize += 4;
+    println(textSize);
+    setWidth(str.length() * (textSize - 2));
+    setHeight(textSize);
   }
 
+  void zoomOut() {
+    if (textSize > 4) {
+      textSize -= 4;
+      println(textSize);
+      setWidth(str.length() * (textSize - 2));
+      setHeight(textSize);
+    }
+  }
+
+
+  void render(PGraphics gr, float cx, float cy) {
+    gr.pushStyle();
+    gr.fill(0);
+    gr.textSize(textSize);
+    gr.text(str, cx+x, cy+y);
+    gr.popStyle();
+  }
 }
+

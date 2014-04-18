@@ -169,7 +169,7 @@ void keyPressed() {
       current.zoomOut();
   }
   else if (key == 'F') { // DEBUG
-    canvas.addLayer(new TextLayer("Hi", mouseX - canvasX, mouseY - canvasY));
+    canvas.addLayer(new TextLayer("Hi", mouseX - canvasX, mouseY - canvasY, 16));
   }
   else if (key == 'p') {
     PGraphics img = canvas.getImage();

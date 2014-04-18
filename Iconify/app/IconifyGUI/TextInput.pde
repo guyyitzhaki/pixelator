@@ -52,7 +52,7 @@ class TextInput extends Container {
       void mousePressed() {
         int len = value.getText().length();
         if (len > 0) {
-          canvas.addLayer(new TextLayer(value.getText(), canvas.getWidth() / 2, canvas.getHeight() / 2));
+          current = canvas.addLayer(new TextLayer(value.getText(), canvas.getWidth() / 2, canvas.getHeight() / 2, 16));
           value.setText("");
         }
       }
