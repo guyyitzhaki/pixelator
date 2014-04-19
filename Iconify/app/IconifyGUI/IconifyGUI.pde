@@ -2,7 +2,7 @@ import java.util.*;
 import java.awt.print.*;
 import java.io.FilenameFilter;
 
-boolean debug = true;
+boolean debug = false;
 
 PImage bgImage;
 ImageButtonList iconList;

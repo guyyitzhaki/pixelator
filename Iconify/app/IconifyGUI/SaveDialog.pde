@@ -14,8 +14,14 @@ class SaveDialog extends Dialog {
     }
     String filename = canvas.save();
     String[] lines = loadStrings("output/output.txt");
-    String[] newLines = new String[lines.length + 1];
-    System.arraycopy(lines, 0, newLines, 0, lines.length);
+    String[] newLines;
+    if (lines != null) {
+      newLines = new String[lines.length + 1];
+      System.arraycopy(lines, 0, newLines, 0, lines.length);
+    }
+    else {
+      newLines = new String[1];
+    }
     newLines[newLines.length-1] = filename + " : " + emailStr;
     saveStrings("output/output.txt", newLines);
     close();
