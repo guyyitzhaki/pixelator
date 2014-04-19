@@ -1,4 +1,14 @@
-class TextButton extends Component {
+abstract class Button extends Component {
+  Button(float x, float y, float w, float h) {
+     super(x,y,w,h);
+  }
+  
+  int getCursor() {
+    return BUTTON_CURSOR;
+  }
+}
+
+class TextButton extends Button {
   String text;
   int hgap = 15;
   int vgap = 5;
@@ -20,7 +30,8 @@ class TextButton extends Component {
   void render() {
     pushStyle();
     fill(255);
-    stroke(0);
+    //stroke(0);
+    noStroke();
     rect(x,y,w,h);
     fill(0);
     text(text, x + hgap, y + h/2 + vgap);
@@ -37,7 +48,7 @@ class TextButton extends Component {
 }
 
 
-class ImageButton extends Component {
+class ImageButton extends Button {
   PImage img;
 
   ImageButton(String path, float x, float y) {

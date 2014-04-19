@@ -9,5 +9,9 @@ class IconButton extends ImageButton {
    void mouseReleased() {
     dragged = null;
   }
+  
+  int getCursor() {
+    return DRAG_CURSOR;
+  }
 
 }

@@ -1,6 +1,9 @@
 ArrayList<Component> components = new ArrayList<Component>();
 Component modal = null;
 
+final int REG_CURSOR = 0;
+final int DRAG_CURSOR = 1;
+final int BUTTON_CURSOR = 2;
 class Component {
   float x, y, w, h;
   boolean enabled = true;
@@ -89,6 +92,10 @@ class Component {
 
   void dispose() {
     components.remove(this);
+  }
+  
+  int getCursor() {
+    return REG_CURSOR;
   }
 }
 

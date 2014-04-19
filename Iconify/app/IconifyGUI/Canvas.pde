@@ -53,11 +53,13 @@ class Canvas extends Component {
     }
     img.endDraw();
     image(img, x, y);
-    pushStyle();
-    stroke(128);
+    /*pushStyle();
+    noStroke();
     noFill();
     rect(x, y, w, h);
     popStyle();
+    */
+    
   }
 
   PGraphics getImage() {
@@ -117,6 +119,10 @@ class Canvas extends Component {
       current = addLayer(new ImageLayer(dragged, mouseX - x - dragged.width/2, mouseY - y - dragged.height/2));
     }
     dragged = null;
+  }
+  
+  int getCursor() {
+    return DRAG_CURSOR;
   }
 }
 

@@ -60,7 +60,8 @@ class ImageButtonList extends Container {
   void render() {
     pushStyle();
     fill(255);
-    stroke(128);
+    //stroke(128);
+    noStroke();
     rect(x + leftButton.getWidth() + 10, y, w - 2 * (leftButton.getWidth()+10), h);
     popStyle();
   }

@@ -6,18 +6,23 @@ class TextInput extends Container {
   TextButton clear, add, del, heb, eng, arb;
   boolean ltor;
   String extraChars;
+  boolean showSpace = true;
 
   TextInput(float _x, float _y, float _w, float _h) {
-    this(_x, _y, _w, _h, true, " ");
+    this(_x, _y, _w, _h, true, true, true, "");
   }
 
-  TextInput(float _x, float _y, float _w, float _h, boolean showAdd, String extraChars) {
+  TextInput(float _x, float _y, float _w, float _h, boolean showAdd, boolean showSpace, boolean showLangs, String extraChars) {
     super(_x, _y, _w, _h);
     this.extraChars = extraChars;
-    
+    this.showSpace = showSpace;
     setEnglish();
 
-    value = new TextButton("", x + 10, y + 50, 300, 30);
+    value = new TextButton("", x + 10, y + 50, 300, 30) {
+      int getCursor() {
+        return REG_CURSOR;
+      }
+    };
     addChild(value);
 
     float btnX = 330;
@@ -39,17 +44,18 @@ class TextInput extends Container {
     addChild(del);
     btnX += btnGap;
 
-    clear = new TextButton("CLR", x + btnX, y + 50, 35, 30) {
-      void mousePressed() {
-        value.setText("");
-      }
-    };
-    clear.setHGap(3);
-    addChild(clear);
-    btnX += btnGap;
-    
+    /*   clear = new TextButton("CLR", x + btnX, y + 50, 35, 30) {
+     void mousePressed() {
+     value.setText("");
+     }
+     };
+     clear.setHGap(3);
+     addChild(clear);
+     btnX += btnGap;
+     */
+
     if (showAdd) {
-      add = new TextButton("ADD", x + btnX, y + 50, 35, 30) {
+      add = new TextButton("⏎", x + btnX, y + 50, 35, 30) {
         void mousePressed() {
           int len = value.getText().length();
           if (len > 0) {
@@ -63,47 +69,49 @@ class TextInput extends Container {
       btnX += btnGap;
     }
 
-    heb = new TextButton("HEB", x + btnX, y + 50, 35, 30) {
-      void mousePressed() {
-        setHebrew();
-      }
-    };
-    heb.setHGap(3);
-    addChild(heb);
-    btnX += btnGap;
+    if (showLangs) {
+      heb = new TextButton("תירבע", x + btnX, y + 50, 35, 30) {
+        void mousePressed() {
+          setHebrew();
+        }
+      };
+      heb.setHGap(3);
+      addChild(heb);
+      btnX += btnGap;
 
-    eng = new TextButton("ENG", x + btnX, y + 50, 35, 30) {
-      void mousePressed() {
-        setEnglish();
-      }
-    };
-    eng.setHGap(3);
-    addChild(eng);
-    btnX += btnGap;
+      eng = new TextButton("ENG", x + btnX, y + 50, 35, 30) {
+        void mousePressed() {
+          setEnglish();
+        }
+      };
+      eng.setHGap(3);
+      addChild(eng);
+      btnX += btnGap;
 
-    arb = new TextButton("ARB", x + btnX, y + 50, 35, 30) {
-      void mousePressed() {
-        setArabic();
-      }
-    };
-    arb.setHGap(3);
-    addChild(arb);
-    btnX += btnGap;
+      arb = new TextButton("ARB", x + btnX, y + 50, 35, 30) {
+        void mousePressed() {
+          setArabic();
+        }
+      };
+      arb.setHGap(3);
+      addChild(arb);
+      btnX += btnGap;
+    }
   }
 
   void setEnglish() {
-    setLanguage('A', 'Z', true);
+    setLanguage("ABCDEFGHIJKLMNOPQRSTUVWXYZ", true);
   }
 
   void setHebrew() {
-    setLanguage('א', 'ת', false);
+    setLanguage("אבגדהוזחטיכךלמםנןסעפףצץקרשת", false);
   }
 
   void setArabic() {
-    setLanguage('ا', 'غ', false);
+    setLanguage("يوهنملكقفغعظطضصشسزرذدخحجثتبا", false);
   }
 
-  void setLanguage(char start, char end, final boolean ltor) {
+  void setLanguage(String chars, final boolean ltor) {
     if (children != null)
       children.removeAll(btns);
     for (TextButton b : btns) {
@@ -112,8 +120,9 @@ class TextInput extends Container {
     btns.clear();
     this.ltor = ltor;
     float buttonx = x + 10;
-    for (int i = start; i <= end; i++) {
-      TextButton b = new TextButton(""+char(i), buttonx, y, 18, 30) {
+
+    for (int i = 0; i < chars.length(); i++) {
+      TextButton b = new TextButton(""+chars.charAt(i), buttonx, y, 18, 30) {
         public void mousePressed() {
           String newval = ltor ? value.getText() + getId() : getId() + value.getText();
           value.setText(newval);
@@ -124,29 +133,30 @@ class TextInput extends Container {
       buttonx += 22;
     }
 
-/*    TextButton spc = new TextButton(" ", buttonx, y, 18, 30) {
-      public void mousePressed() {
-        String newval = ltor ? value.getText() + " " : " " + value.getText();
-        value.setText(newval);
-      }
-    };
-    setBtnParams(spc);
-    buttonx += 22;
-  */  
+    if (showSpace) {
+      TextButton spc = new TextButton("  ", buttonx, y, 30, 30) {
+        public void mousePressed() {
+          String newval = ltor ? value.getText() + " " : " " + value.getText();
+          value.setText(newval);
+        }
+      };
+      setBtnParams(spc);
+      buttonx += 34;
+    }
+
     for (int i = 0; i < extraChars.length(); i++) {
-    char c = extraChars.charAt(i);  
-    TextButton extra = new TextButton("" + c, buttonx, y, 18, 30) {
-      public void mousePressed() {
-        String newval = ltor ? value.getText() + getId() : getId() + value.getText();
-        value.setText(newval);
-      }
-    };
-    setBtnParams(extra);
-    buttonx += 22;
-    
+      char c = extraChars.charAt(i);  
+      TextButton extra = new TextButton("" + c, buttonx, y, 18, 30) {
+        public void mousePressed() {
+          String newval = ltor ? value.getText() + getId() : getId() + value.getText();
+          value.setText(newval);
+        }
+      };
+      setBtnParams(extra);
+      buttonx += 22;
     }
   }
-  
+
   String getValue() {
     return value.getText();
   }

@@ -15,11 +15,19 @@ PImage dragged;
 Layer current;
 float moveX, moveY;
 boolean moving = false;
+PImage dragCursor, regCursor, buttonCursor;
+
+
 
 void setup() {
   size(1024, 768);
+  noCursor();
   bgImage = loadImage("main.png");
-
+  
+  dragCursor = loadImage("dragcursor.png");
+  regCursor = loadImage("regcursor.png");
+  buttonCursor = loadImage("buttoncursor.png");
+  
   PFont font = loadFont("Monospaced-16.vlw");
   textFont(font);
   float listWidth = width - 300;
@@ -115,6 +123,8 @@ void draw() {
     image(dragged, mouseX-dragged.width/2, mouseY-dragged.height/2); 
     popStyle();
   }
+  
+  drawCursor();
 
   if (moving) {
     float changeX = mouseX - moveX;
@@ -125,6 +135,20 @@ void draw() {
   }
   if (debug)
     text(mouseX + "," + mouseY, 10, 10);
+}
+
+void drawCursor() {
+  PImage cursorImg = getCursor(REG_CURSOR);
+  ArrayList<Component> active = getActiveComponents();
+  for (Component component : active) {
+    if (component.isEnabled() && component.isInside(mouseX, mouseY) && !(component instanceof Container)) {
+      int cursor = component.getCursor();
+      cursorImg = getCursor(cursor);
+    }
+  }
+  int cursorSize = 20;
+  image(cursorImg, mouseX-cursorSize/2, mouseY-cursorSize/2, cursorSize,cursorSize); 
+
 }
 
 ArrayList<Component> getActiveComponents() {
@@ -195,4 +219,17 @@ void keyPressed() {
     }
   }
 }
+
+PImage getCursor(int type) {
+  switch (type) {
+     case REG_CURSOR:
+       return regCursor;
+     case BUTTON_CURSOR:
+       return buttonCursor;
+     case DRAG_CURSOR:
+       return dragCursor;
+  }
+  return null;
+}
+
 

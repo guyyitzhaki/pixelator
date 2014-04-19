@@ -3,7 +3,7 @@ class SaveDialog extends Dialog {
   
   SaveDialog() {
     super("Enter email:", 900,300);
-    email = new TextInput(x + 5, y+100, 700, 90, false, "_.@0123456789");
+    email = new TextInput(x + 5, y+100, 700, 90, false, false, false, "_.@0123456789");
     setMsgX(10);
     setMsgY(50);
     addChild(email);
