@@ -127,9 +127,21 @@ void draw() {
     text(mouseX + "," + mouseY, 10, 10);
 }
 
+ArrayList<Component> getActiveComponents() {
+  ArrayList<Component> active = new ArrayList<Component>();
+  if (modal != null) {
+    active.add(modal);
+    active.addAll(modal.getChildren());
+  }
+  else {
+    active.addAll(components);
+  }
+  return active;
+}
+
 void mousePressed() {
-  ArrayList<Component> all = new ArrayList<Component>(components);
-  for (Component component : all) {
+  ArrayList<Component> active = getActiveComponents();
+  for (Component component : active) {
     if (component.isEnabled() && component.isInside(mouseX, mouseY)) {
       component.mousePressed();
     }
@@ -137,8 +149,8 @@ void mousePressed() {
 }
 
 void mouseReleased() {
-  ArrayList<Component> all = new ArrayList<Component>(components);
-  for (Component component : all) {
+  ArrayList<Component> active = getActiveComponents();
+  for (Component component : active) {
     if (component.isEnabled() && component.isInside(mouseX, mouseY)) {
       component.mouseReleased();
     }

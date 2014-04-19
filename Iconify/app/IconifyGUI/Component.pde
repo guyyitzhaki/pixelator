@@ -1,4 +1,5 @@
 ArrayList<Component> components = new ArrayList<Component>();
+Container modal = null;
 
 class Component {
   float x, y, w, h;
@@ -96,7 +97,11 @@ class Container extends Component {
   Container(float _x, float _y, float _w, float _h, boolean manage) {
     super(_x, _y, _w, _h, manage);
   }
-
+  
+  ArrayList<Component> getChildren() {
+    return children;
+  }
+  
   void addChild(Component c) {
     if (children == null)
       children = new ArrayList<Component>();

@@ -10,6 +10,8 @@ class Dialog extends Container {
         close();
       }
     };
+    ok.setHGap(20);
+    modal = this;
     addChild(ok);
   }
   
@@ -20,13 +22,14 @@ class Dialog extends Container {
     strokeWeight(5);
     rect(x,y,w,h);
     fill(0);
-    text(msg, x + w / 2 - 18, y  + h  /  3);
+    text(msg, x + w / 2 - msg.length()/2 *10, y  + h  /  3);
     rect(x, y + h - 40, w, 40);
     popStyle();
     ok.render();
   }
   
   void close() {
+    modal = null;
     dispose();
   }
   
