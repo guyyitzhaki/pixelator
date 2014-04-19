@@ -5,14 +5,16 @@ class TextInput extends Container {
   TextButton value;
   TextButton clear, add, del, heb, eng, arb;
   boolean ltor;
+  String extraChars;
 
   TextInput(float _x, float _y, float _w, float _h) {
-    this(_x, _y, _w, _h, true);
+    this(_x, _y, _w, _h, true, " ");
   }
 
-  TextInput(float _x, float _y, float _w, float _h, boolean showAdd) {
+  TextInput(float _x, float _y, float _w, float _h, boolean showAdd, String extraChars) {
     super(_x, _y, _w, _h);
-
+    this.extraChars = extraChars;
+    
     setEnglish();
 
     value = new TextButton("", x + 10, y + 50, 300, 30);
@@ -122,7 +124,7 @@ class TextInput extends Container {
       buttonx += 22;
     }
 
-    TextButton spc = new TextButton(" ", buttonx, y, 18, 30) {
+/*    TextButton spc = new TextButton(" ", buttonx, y, 18, 30) {
       public void mousePressed() {
         String newval = ltor ? value.getText() + " " : " " + value.getText();
         value.setText(newval);
@@ -130,6 +132,19 @@ class TextInput extends Container {
     };
     setBtnParams(spc);
     buttonx += 22;
+  */  
+    for (int i = 0; i < extraChars.length(); i++) {
+    char c = extraChars.charAt(i);  
+    TextButton extra = new TextButton("" + c, buttonx, y, 18, 30) {
+      public void mousePressed() {
+        String newval = ltor ? value.getText() + getId() : getId() + value.getText();
+        value.setText(newval);
+      }
+    };
+    setBtnParams(extra);
+    buttonx += 22;
+    
+    }
   }
   
   String getValue() {

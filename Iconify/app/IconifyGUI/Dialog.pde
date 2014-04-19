@@ -1,5 +1,6 @@
 class Dialog extends Container {
   String msg;
+  float msgX, msgY;
   TextButton ok;
   
   Dialog(String msg, float w, float h) {
@@ -11,8 +12,18 @@ class Dialog extends Container {
       }
     };
     ok.setHGap(20);
+    msgX = w / 2 - msg.length()/2 * 10;
+    msgY = h  /  3;
     modal = this;
     addChild(ok);
+  }
+  
+  void setMsgX(float msgx) {
+    msgX = msgx;
+  }
+  
+  void setMsgY(float msgy) {
+    msgY = msgy;
   }
   
   void render() {
@@ -22,7 +33,7 @@ class Dialog extends Container {
     strokeWeight(5);
     rect(x,y,w,h);
     fill(0);
-    text(msg, x + w / 2 - msg.length()/2 *10, y  + h  /  3);
+    text(msg, x + msgX, y  + msgY);
     rect(x, y + h - 40, w, 40);
     popStyle();
     ok.render();
