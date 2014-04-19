@@ -13,11 +13,11 @@ class SaveDialog extends Dialog {
       return;
     }
     String filename = canvas.save();
-    String[] lines = loadStrings("data/output.txt");
+    String[] lines = loadStrings("output/output.txt");
     String[] newLines = new String[lines.length + 1];
     System.arraycopy(lines, 0, newLines, 0, lines.length);
     newLines[newLines.length-1] = filename + " : " + emailStr;
-    saveStrings("data/output.txt", newLines);
+    saveStrings("output/output.txt", newLines);
     close();
   }
 }
