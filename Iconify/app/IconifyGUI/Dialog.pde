@@ -7,7 +7,7 @@ class Dialog extends Container {
     this.msg = msg;
     ok = new TextButton("OK", getX() + w / 2 - 30, getY() + h - 40, 60,30) {
       void mousePressed() {
-        close();
+        okPressed();
       }
     };
     ok.setHGap(20);
@@ -26,6 +26,10 @@ class Dialog extends Container {
     rect(x, y + h - 40, w, 40);
     popStyle();
     ok.render();
+  }
+  
+  void okPressed() {
+    close();
   }
   
   void close() {

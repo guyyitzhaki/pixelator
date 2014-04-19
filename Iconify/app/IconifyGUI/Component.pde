@@ -1,5 +1,5 @@
 ArrayList<Component> components = new ArrayList<Component>();
-Container modal = null;
+Component modal = null;
 
 class Component {
   float x, y, w, h;
@@ -19,6 +19,10 @@ class Component {
     h = _h;
     if (manage)
       components.add(this);
+  }
+  
+  ArrayList<Component> getChildren() {
+    return null;
   }
 
   void setId(String id) {
@@ -90,6 +94,7 @@ class Component {
 
 class Container extends Component {
   ArrayList<Component> children; 
+  
   Container(float _x, float _y, float _w, float _h) {
     this(_x, _y, _w, _h, true);
   }
@@ -99,7 +104,17 @@ class Container extends Component {
   }
   
   ArrayList<Component> getChildren() {
-    return children;
+    ArrayList allChildren = new ArrayList<Component>();
+    if (children != null) {
+      for (Component child : children) {
+        ArrayList<Component> grandChildren = child.getChildren();
+        if (grandChildren != null) {
+          allChildren.addAll(grandChildren);
+        }
+        allChildren.add(child);
+      }
+    }
+    return allChildren;
   }
   
   void addChild(Component c) {

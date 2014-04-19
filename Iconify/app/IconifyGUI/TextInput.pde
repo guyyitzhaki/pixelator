@@ -7,6 +7,10 @@ class TextInput extends Container {
   boolean ltor;
 
   TextInput(float _x, float _y, float _w, float _h) {
+    this(_x, _y, _w, _h, true);
+  }
+
+  TextInput(float _x, float _y, float _w, float _h, boolean showAdd) {
     super(_x, _y, _w, _h);
 
     setEnglish();
@@ -14,7 +18,9 @@ class TextInput extends Container {
     value = new TextButton("", x + 10, y + 50, 300, 30);
     addChild(value);
 
-    del = new TextButton("DEL", x + 330, y + 50, 35, 30) {
+    float btnX = 330;
+    float btnGap = 50;
+    del = new TextButton("DEL", x + btnX, y + 50, 35, 30) {
       void mousePressed() {
         int len = value.getText().length();
         if (len > 0) {
@@ -29,49 +35,58 @@ class TextInput extends Container {
     };
     del.setHGap(3);
     addChild(del);
+    btnX += btnGap;
 
-    clear = new TextButton("CLR", x + 380, y + 50, 35, 30) {
+    clear = new TextButton("CLR", x + btnX, y + 50, 35, 30) {
       void mousePressed() {
         value.setText("");
       }
     };
     clear.setHGap(3);
     addChild(clear);
-    add = new TextButton("ADD", x + 430, y + 50, 35, 30) {
-      void mousePressed() {
-        int len = value.getText().length();
-        if (len > 0) {
-          current = canvas.addLayer(new TextLayer(value.getText(), canvas.getWidth() / 2, canvas.getHeight() / 2, 16));
-          value.setText("|");
+    btnX += btnGap;
+    
+    if (showAdd) {
+      add = new TextButton("ADD", x + btnX, y + 50, 35, 30) {
+        void mousePressed() {
+          int len = value.getText().length();
+          if (len > 0) {
+            current = canvas.addLayer(new TextLayer(value.getText(), canvas.getWidth() / 2, canvas.getHeight() / 2, 16));
+            value.setText("|");
+          }
         }
-      }
-    };
-    add.setHGap(3);
-    addChild(add);
+      };
+      add.setHGap(3);
+      addChild(add);
+      btnX += btnGap;
+    }
 
-    heb = new TextButton("HEB", x + 480, y + 50, 35, 30) {
+    heb = new TextButton("HEB", x + btnX, y + 50, 35, 30) {
       void mousePressed() {
         setHebrew();
       }
     };
     heb.setHGap(3);
     addChild(heb);
+    btnX += btnGap;
 
-    eng = new TextButton("ENG", x + 530, y + 50, 35, 30) {
+    eng = new TextButton("ENG", x + btnX, y + 50, 35, 30) {
       void mousePressed() {
         setEnglish();
       }
     };
     eng.setHGap(3);
     addChild(eng);
+    btnX += btnGap;
 
-    arb = new TextButton("ARB", x + 580, y + 50, 35, 30) {
+    arb = new TextButton("ARB", x + btnX, y + 50, 35, 30) {
       void mousePressed() {
         setArabic();
       }
     };
     arb.setHGap(3);
     addChild(arb);
+    btnX += btnGap;
   }
 
   void setEnglish() {
@@ -115,6 +130,10 @@ class TextInput extends Container {
     };
     setBtnParams(spc);
     buttonx += 22;
+  }
+  
+  String getValue() {
+    return value.getText();
   }
 
   void setBtnParams(TextButton b) {

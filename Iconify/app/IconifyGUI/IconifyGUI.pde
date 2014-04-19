@@ -88,8 +88,8 @@ void setup() {
   ImageButton save = new ImageButton("buttons/save.png", canvasX-75, height - 90) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
-        Dialog save = new Dialog("Save", 400, 300);
-        canvas.save();
+        SaveDialog save = new SaveDialog();
+        //canvas.save();
       }
     }
   }; 

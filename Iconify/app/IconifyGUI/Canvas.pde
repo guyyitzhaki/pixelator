@@ -95,11 +95,11 @@ class Canvas extends Component {
     return null;
   }
 
-  void save() {
-    //   select = false;
+  String save() {
     render();
-    img.save("output.png");  
-    //    select = true;
+    String filename =  year() + nf(month(), 2) + nf(day(),2) + nf(hour(),2) + nf(minute(),2) + nf(second(),2) + ".png";
+    img.save("output/" + filename);  
+    return filename;
   }
 
   void mousePressed() {
