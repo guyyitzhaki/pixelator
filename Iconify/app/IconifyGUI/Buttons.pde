@@ -88,8 +88,9 @@ class TextArea extends Component {
     rect(x, y, w, h);
     fill(0);
     String displayed = text;
-    if (text!=null && textWidth(text) > w + hgap) {
-      displayed = "..." + text.substring(text.length() - 5);
+    int charNum = int((w - hgap) / textWidth("A"));
+    if (text.length() > charNum) {
+      displayed = "..." + text.substring(text.length()-charNum+3);
     }
     text(displayed, x + hgap, y + h/2 + vgap);
     float sw = textWidth(displayed);
