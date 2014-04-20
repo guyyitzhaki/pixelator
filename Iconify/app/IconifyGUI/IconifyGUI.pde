@@ -87,7 +87,7 @@ void setup() {
   ImageButton print = new ImageButton("buttons/print.png", canvasX-75, height - 160) {
     public void mousePressed() {
       if (!canvas.isEmpty()) {
-        Dialog printing = new Dialog("Printing...", 400, 300);
+        Dialog printing = new Dialog("Printing...", 400, 300, false);
         PGraphics img = canvas.getImage();
         handlePrint(img);
       }

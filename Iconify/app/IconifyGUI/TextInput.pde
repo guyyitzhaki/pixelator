@@ -2,8 +2,8 @@ class TextInput extends Container {
 
   ArrayList<TextButton> btns = new ArrayList<TextButton>(); 
 
-  TextButton value;
-  TextButton clear, add, del, heb, eng, arb;
+  TextArea value;
+  TextButton clear, add, del, heb, eng, arb, nums;
   boolean ltor;
   String extraChars;
   boolean showSpace = true;
@@ -18,11 +18,8 @@ class TextInput extends Container {
     this.showSpace = showSpace;
     setEnglish();
 
-    value = new TextButton("", x + 10, y + 50, 300, 30) {
-      int getCursor() {
-        return REG_CURSOR;
-      }
-    };
+    value = new TextArea("", x + 10, y + 50, 300, 30);
+    value.setHGap(3);
     addChild(value);
 
     float btnX = 330;
@@ -40,7 +37,6 @@ class TextInput extends Container {
         }
       }
     };
-    del.setHGap(3);
     addChild(del);
     btnX += btnGap;
 
@@ -64,18 +60,26 @@ class TextInput extends Container {
           }
         }
       };
-      add.setHGap(3);
       addChild(add);
       btnX += btnGap;
     }
 
+
+
     if (showLangs) {
+      nums = new TextButton("NUM", x + btnX, y + 50, 35, 30) {
+        void mousePressed() {
+          setNumbers();
+        }
+      };
+      addChild(nums);
+      btnX += btnGap;
+      
       heb = new TextButton("תירבע", x + btnX, y + 50, 35, 30) {
         void mousePressed() {
           setHebrew();
         }
       };
-      heb.setHGap(3);
       addChild(heb);
       btnX += btnGap;
 
@@ -84,7 +88,6 @@ class TextInput extends Container {
           setEnglish();
         }
       };
-      eng.setHGap(3);
       addChild(eng);
       btnX += btnGap;
 
@@ -93,7 +96,6 @@ class TextInput extends Container {
           setArabic();
         }
       };
-      arb.setHGap(3);
       addChild(arb);
       btnX += btnGap;
     }
@@ -105,6 +107,10 @@ class TextInput extends Container {
 
   void setHebrew() {
     setLanguage("אבגדהוזחטיכךלמםנןסעפףצץקרשת", false);
+  }
+
+  void setNumbers() {
+    setLanguage("0123456789!@#$%*()_+=-?/:,.", true);
   }
 
   void setArabic() {
@@ -162,7 +168,6 @@ class TextInput extends Container {
   }
 
   void setBtnParams(TextButton b) {
-    b.setHGap(4);
     b.setVGap(5);
     btns.add(b);
     addChild(b);

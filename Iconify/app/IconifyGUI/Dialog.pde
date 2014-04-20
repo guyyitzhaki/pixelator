@@ -1,21 +1,31 @@
 class Dialog extends Container {
   String msg;
   float msgX, msgY;
-  TextButton ok;
+  TextButton ok, cancel;
+  color bg;
   
-  Dialog(String msg, float w, float h) {
+  Dialog(String msg, float w, float h, boolean showCancel) {
     super(width / 2 - w / 2,height / 2 - h / 2, w, h);
     this.msg = msg;
-    ok = new TextButton("OK", getX() + w / 2 - 30, getY() + h - 40, 60,30) {
+    int gap = showCancel ? 90 : 30;
+    ok = new TextButton("OK", getX() + w / 2 - gap, getY() + h - 40, 80,30) {
       void mousePressed() {
         okPressed();
       }
     };
-    ok.setHGap(20);
+    addChild(ok);
+    
+    if (showCancel) {
+      cancel = new TextButton("CANCEL", getX() + w / 2 + gap, getY() + h - 40, 80,30) {
+        void mousePressed() {
+          cancelPressed();
+        }
+      };
+      addChild(cancel);
+    }
     msgX = w / 2 - msg.length()/2 * 10;
     msgY = h  /  3;
     modal = this;
-    addChild(ok);
   }
   
   void setMsgX(float msgx) {
@@ -28,7 +38,7 @@ class Dialog extends Container {
   
   void render() {
     pushStyle();
-    fill(255);
+    fill(240);
     stroke(0);
     strokeWeight(5);
     rect(x,y,w,h);
@@ -43,6 +53,10 @@ class Dialog extends Container {
     close();
   }
   
+  void cancelPressed() {
+    close();
+  }
+
   void close() {
     modal = null;
     dispose();
