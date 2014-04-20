@@ -39,6 +39,10 @@ abstract class Layer extends Component {
 
 
   abstract void render(PGraphics gr, float cx, float cy);
+  
+  int getCursor() {
+    return DRAG_CURSOR;
+  }
 }
 
 

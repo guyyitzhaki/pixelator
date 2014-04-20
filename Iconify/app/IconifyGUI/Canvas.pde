@@ -1,4 +1,4 @@
-class Canvas extends Component {
+class Canvas extends Container {
   ArrayList<Layer> layers = new ArrayList<Layer>();
   PGraphics img;
   color bg;
@@ -68,16 +68,22 @@ class Canvas extends Component {
 
   Layer addLayer(Layer l) {
     layers.add(l); 
+    addChild(l);
     return l;
   }
 
   void clear() {
+    for (Layer l : layers) {
+      l.dispose();
+    }
     layers.clear();
+    
   }
 
   void removeLast() {
     if (!layers.isEmpty()) {
-      layers.remove(layers.size() - 1);
+      Layer l = layers.remove(layers.size() - 1);
+      l.dispose();
     }
   }
 
@@ -122,7 +128,7 @@ class Canvas extends Component {
   }
   
   int getCursor() {
-    return DRAG_CURSOR;
+    return REG_CURSOR;
   }
 }
 

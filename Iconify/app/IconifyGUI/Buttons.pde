@@ -10,7 +10,6 @@ abstract class Button extends Component {
 
 class TextButton extends Button {
   String text;
-  int hgap = 15;
   int vgap = 5;
 
   TextButton(String txt, float x, float y, float w, float h) {
@@ -19,8 +18,6 @@ class TextButton extends Button {
     text = txt;
   } 
 
-
-
   void setVGap(int val) {
     vgap = val;
   }   
@@ -28,7 +25,6 @@ class TextButton extends Button {
   void render() {
     pushStyle();
     fill(255);
-    //stroke(0);
     noStroke();
     rect(x, y, w, h);
     fill(0); 

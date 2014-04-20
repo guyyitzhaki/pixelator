@@ -56,7 +56,7 @@ class TextInput extends Container {
           int len = value.getText().length();
           if (len > 0) {
             current = canvas.addLayer(new TextLayer(value.getText(), canvas.getWidth() / 2, canvas.getHeight() / 2, 16));
-            value.setText("|");
+            value.setText("");
           }
         }
       };

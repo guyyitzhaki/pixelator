@@ -113,7 +113,7 @@ void draw() {
   image(bgImage, 0, 0);
 
   for (Component c : components) {
-    if (c.isEnabled())
+    if (c.isEnabled() && c.isTopLevel())
       c.render();
   }
 

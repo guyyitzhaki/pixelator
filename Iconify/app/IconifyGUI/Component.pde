@@ -8,6 +8,7 @@ class Component {
   float x, y, w, h;
   boolean enabled = true;
   String id;
+  Container parent = null;
 
 
   Component(float _x, float _y, float _w, float _h) {
@@ -97,6 +98,14 @@ class Component {
   int getCursor() {
     return REG_CURSOR;
   }
+  
+  void setParent(Container c) {
+    parent = c;
+  }
+  
+  boolean isTopLevel() {
+    return parent == null;
+  }
 }
 
 class Container extends Component {
@@ -128,6 +137,7 @@ class Container extends Component {
     if (children == null)
       children = new ArrayList<Component>();
     children.add(c);
+    c.setParent(this);
   }
 
   void dispose() {
@@ -145,6 +155,13 @@ class Container extends Component {
       for (Component c : children) {
         c.setEnabled(val);
       }
+    }
+  }
+  
+  void render() {
+    for (Component c : children) {
+      if (c.isEnabled())
+        c.render();
     }
   }
 }

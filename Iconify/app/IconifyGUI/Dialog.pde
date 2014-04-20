@@ -16,7 +16,7 @@ class Dialog extends Container {
     addChild(ok);
     
     if (showCancel) {
-      cancel = new TextButton("CANCEL", getX() + w / 2 + gap, getY() + h - 40, 80,30) {
+      cancel = new TextButton("CANCEL", getX() + w / 2 + gap, getY() + h - 40, 80, 30) {
         void mousePressed() {
           cancelPressed();
         }
@@ -46,7 +46,7 @@ class Dialog extends Container {
     text(msg, x + msgX, y  + msgY);
     rect(x, y + h - 40, w, 40);
     popStyle();
-    ok.render();
+    super.render();
   }
   
   void okPressed() {

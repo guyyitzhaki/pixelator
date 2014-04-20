@@ -64,6 +64,7 @@ class ImageButtonList extends Container {
     noStroke();
     rect(x + leftButton.getWidth() + 10, y, w - 2 * (leftButton.getWidth()+10), h);
     popStyle();
+    super.render();
   }
 
   void updateDisplayedIcons() {
