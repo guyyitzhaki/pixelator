@@ -24,7 +24,7 @@ class TextInput extends Container {
 
     float btnX = 330;
     float btnGap = 50;
-    del = new TextButton("DEL", x + btnX, y + 50, 35, 30) {
+    del = new TextButton("DEL", x + btnX, y + 50, 45, 30) {
       void mousePressed() {
         int len = value.getText().length();
         if (len > 0) {
@@ -51,7 +51,7 @@ class TextInput extends Container {
      */
 
     if (showAdd) {
-      add = new TextButton("⏎", x + btnX, y + 50, 35, 30) {
+      add = new TextButton("⏎", x + btnX, y + 50, 45, 30) {
         void mousePressed() {
           int len = value.getText().length();
           if (len > 0) {
@@ -67,7 +67,7 @@ class TextInput extends Container {
 
 
     if (showLangs) {
-      nums = new TextButton("NUM", x + btnX, y + 50, 35, 30) {
+      nums = new TextButton("NUM", x + btnX, y + 50, 45, 30) {
         void mousePressed() {
           setNumbers();
         }
@@ -75,7 +75,7 @@ class TextInput extends Container {
       addChild(nums);
       btnX += btnGap;
       
-      heb = new TextButton("תירבע", x + btnX, y + 50, 35, 30) {
+      heb = new TextButton("תירבע", x + btnX, y + 50, 45, 30) {
         void mousePressed() {
           setHebrew();
         }
@@ -83,7 +83,7 @@ class TextInput extends Container {
       addChild(heb);
       btnX += btnGap;
 
-      eng = new TextButton("ENG", x + btnX, y + 50, 35, 30) {
+      eng = new TextButton("ENG", x + btnX, y + 50, 45, 30) {
         void mousePressed() {
           setEnglish();
         }
@@ -91,7 +91,7 @@ class TextInput extends Container {
       addChild(eng);
       btnX += btnGap;
 
-      arb = new TextButton("ARB", x + btnX, y + 50, 35, 30) {
+      arb = new TextButton("العربية", x + btnX, y + 50, 45, 30) {
         void mousePressed() {
           setArabic();
         }
