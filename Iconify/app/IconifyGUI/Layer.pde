@@ -4,70 +4,50 @@ abstract class Layer extends Component {
 
   Layer(float x, float y, float w, float h) {
     super(x, y, w, h, false);
-    
   }
 
   void place(float newx, float newy) {
     x = newx;
     y = newy;
-    
   }
 
   void moveUp() {
     y--;
-    
   }
 
   void moveDown() {
     y++;
-    
   }
 
   void moveRight() {
     x++;
-    
   }
 
   void moveLeft() {
     x--;
-    
   }
 
   void rotateRight() {
     angle += 3;
-    
   }
 
   void rotateLeft() {
     angle -= 3;
-    
   }
 
   void zoomIn() {
     w *= 1.1;
     h *= 1.1;
-    
   }
 
   void zoomOut() {
     w *= 0.9;
     h *= 0.9;
-    
   }
-
-
-
-
-
 
   boolean isInside(float mx, float my) {
-
     return mx >= x && mx <= x + w && my >= y && my <= y + h;
   }
-
-
-
-
 
   abstract void render(PGraphics gr);
 
