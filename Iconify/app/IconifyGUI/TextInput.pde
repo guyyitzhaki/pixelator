@@ -104,9 +104,8 @@ class TextInput extends Container {
   void setEnglish() {
     setLanguage("ABCDEFGHIJKLMNOPQRSTUVWXYZ", true);
   }
-
   void setHebrew() {
-    setLanguage("אבגדהוזחטיכךלמםנןסעפףצץקרשת", false);
+        setLanguage("תרשקץצףפעסןנםמלךכיטחזוהדגבא", false);
   }
 
   void setNumbers() {
