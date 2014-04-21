@@ -3,7 +3,7 @@ class TextInput extends Container {
   ArrayList<TextButton> btns = new ArrayList<TextButton>(); 
 
   TextArea value;
-  TextButton clear, add, del, heb, eng, arb, nums;
+  ImageButton del, add, nums, heb, eng, arb;
   boolean ltor;
   String extraChars;
   boolean showSpace = true;
@@ -24,7 +24,7 @@ class TextInput extends Container {
 
     float btnX = 330;
     float btnGap = 50;
-    del = new TextButton("DEL", x + btnX, y + 50, 45, 30) {
+    del = new ImageButton("data/buttons/delete.png", x + btnX, y + 50) {
       void mousePressed() {
         int len = value.getText().length();
         if (len > 0) {
@@ -51,7 +51,7 @@ class TextInput extends Container {
      */
 
     if (showAdd) {
-      add = new TextButton("⏎", x + btnX, y + 50, 45, 30) {
+      add = new ImageButton("data/buttons/add.png", x + btnX, y + 50) {
         void mousePressed() {
           int len = value.getText().length();
           if (len > 0) {
@@ -67,7 +67,7 @@ class TextInput extends Container {
 
 
     if (showLangs) {
-      nums = new TextButton("NUM", x + btnX, y + 50, 45, 30) {
+      nums = new ImageButton("data/buttons/numbers.png", x + btnX, y + 50) {
         void mousePressed() {
           setNumbers();
         }
@@ -75,7 +75,7 @@ class TextInput extends Container {
       addChild(nums);
       btnX += btnGap;
       
-      heb = new TextButton("תירבע", x + btnX, y + 50, 45, 30) {
+      heb = new ImageButton("data/buttons/hebrew.png", x + btnX, y + 50) {
         void mousePressed() {
           setHebrew();
         }
@@ -83,7 +83,7 @@ class TextInput extends Container {
       addChild(heb);
       btnX += btnGap;
 
-      eng = new TextButton("ENG", x + btnX, y + 50, 45, 30) {
+      eng = new ImageButton("data/buttons/english.png", x + btnX, y + 50) {
         void mousePressed() {
           setEnglish();
         }
@@ -91,7 +91,7 @@ class TextInput extends Container {
       addChild(eng);
       btnX += btnGap;
 
-      arb = new TextButton("العربية", x + btnX, y + 50, 45, 30) {
+      arb = new ImageButton("data/buttons/arabic.png", x + btnX, y + 50) {
         void mousePressed() {
           setArabic();
         }

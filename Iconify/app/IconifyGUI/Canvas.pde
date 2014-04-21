@@ -2,7 +2,6 @@ class Canvas extends Container {
   ArrayList<Layer> layers = new ArrayList<Layer>();
   PGraphics img;
   color bg;
-  boolean select;
 
   Canvas(int x, int y, int w, int h) {
     super(x, y, w, h);
@@ -43,13 +42,7 @@ class Canvas extends Container {
     img.beginDraw();
     img.background(255);
     for (Layer l : layers) {
-      l.render(img, 0, 0);
-    }
-    if (select && !layers.isEmpty()) {
-      Layer l = topLayer();
-      img.stroke(0);
-      img.noFill();
-      img.rect(l.x, l.y, l.w, l.h);
+      l.render(img);
     }
     img.endDraw();
     image(img, x, y);
@@ -78,6 +71,12 @@ class Canvas extends Container {
     }
     layers.clear();
     
+  }
+  
+  void delete(Layer l) {
+    l.dispose();
+    layers.remove(l);
+    children.remove(l);
   }
 
   void removeLast() {

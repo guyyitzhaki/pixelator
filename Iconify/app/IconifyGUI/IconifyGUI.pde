@@ -18,7 +18,6 @@ boolean moving = false;
 PImage dragCursor, regCursor, buttonCursor;
 
 
-
 void setup() {
   size(1024, 768);
   noCursor();
@@ -79,9 +78,10 @@ void setup() {
       textInput.setEnabled(true);
     }
   }; 
-  ImageButton clear = new ImageButton("buttons/trash.png", canvasX+canvasWidth+25, height - 90) {
+  ImageButton del = new ImageButton("buttons/trash.png", canvasX+canvasWidth+25, height - 90) {
     public void mousePressed() {
-      canvas.clear();
+      if (current != null)
+        canvas.delete(current);
     }
   }; 
   ImageButton print = new ImageButton("buttons/print.png", canvasX-75, height - 160) {
@@ -133,8 +133,9 @@ void draw() {
       return;
     current.place(changeX-canvasX, changeY-canvasY);
   }
-  if (debug)
+  if (debug) {
     text(mouseX + "," + mouseY, 10, 10);
+  }
 }
 
 void drawCursor() {
@@ -193,6 +194,14 @@ void keyPressed() {
   }
   else if (key == 's') {
     canvas.save();
+  }
+  else if (key == '[') {
+    if (current != null)
+      current.rotateRight();
+  }
+  else if (key == ']') {
+    if (current != null)
+      current.rotateLeft();
   }
   else if (key == CODED) {
     switch (keyCode) {
