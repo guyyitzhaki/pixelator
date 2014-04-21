@@ -82,6 +82,7 @@ void setup() {
     public void mousePressed() {
       if (current != null)
         canvas.delete(current);
+        current = canvas.topLayer();
     }
   }; 
   ImageButton print = new ImageButton("buttons/print.png", canvasX-75, height - 160) {
