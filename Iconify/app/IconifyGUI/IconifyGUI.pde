@@ -147,8 +147,7 @@ void drawCursor() {
       cursorImg = getCursor(cursor);
     }
   }
-  int cursorSize = 20;
-  image(cursorImg, mouseX-cursorSize/2, mouseY-cursorSize/2, cursorSize,cursorSize); 
+  image(cursorImg, mouseX, mouseY); 
 
 }
 
