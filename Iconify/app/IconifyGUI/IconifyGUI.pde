@@ -44,18 +44,38 @@ void setup() {
   canvasY = height - 40 - canvasHeight;
   canvas = new Canvas(canvasX, canvasY, canvasWidth, canvasHeight);
 
-  ImageButton zoomIn = new ImageButton("buttons/plus.png", 211, canvasY) {
+  float btnY = canvasY;
+  ImageButton zoomIn = new ImageButton("buttons/plus.png", 211, btnY) {
     public void mousePressed() {
       if (current != null)
         current.zoomIn();
     }
   };
-  ImageButton zoomOut = new ImageButton("buttons/minus.png", 211, canvasY + zoomIn.getHeight() + 10) {
+  btnY += zoomIn.getHeight() + 10;
+
+  ImageButton zoomOut = new ImageButton("buttons/minus.png", 211, btnY) {
     public void mousePressed() {
       if (current != null)
         current.zoomOut();
     }
   };
+  btnY += zoomIn.getHeight() + 10;
+  
+  ImageButton rotateRight = new ImageButton("buttons/turnright.png", 211, btnY) {
+    public void mousePressed() {
+      if (current != null)
+        current.rotateRight();
+    }
+  };
+  btnY += zoomIn.getHeight() + 10;
+
+  ImageButton rotateLeft = new ImageButton("buttons/turnleft.png", 211, btnY) {
+    public void mousePressed() {
+      if (current != null)
+        current.rotateLeft();
+    }
+  };
+  btnY += zoomIn.getHeight() + 10;
 
   ImageButton backgrounds = new ImageButton("buttons/background.png", 910, 120) {
     public void mousePressed() {
