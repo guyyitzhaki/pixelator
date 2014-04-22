@@ -1,6 +1,5 @@
 abstract class Layer extends Component {
   int angle = 0;
-  float bx, by, bw, bh;
 
   Layer(float x, float y, float w, float h) {
     super(x, y, w, h, false);
