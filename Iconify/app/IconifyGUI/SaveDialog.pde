@@ -2,15 +2,21 @@ class SaveDialog extends Dialog {
   TextInput email,comment;
   
   SaveDialog() {
-    super("Enter email:", 900, 300, true);
-    setMsgX(10);
-    setMsgY(50);
+    super("Enter email:", 900, 400, true);
+    setMsgX(15);
+    setMsgY(30);
 
-    email = new TextInput(x + 5, y+100, 700, 90, false, false, false, "_.@0123456789");
+    float componentY = y + 50;
+    email = new TextInput(x + 5, componentY, 700, 90, false, false, false, "_.@0123456789");
     addChild(email);
 
-//    comment = new TextInput(x + 5, y+210, 700, 90, false, true, true, "");
-//    addChild(comment);
+    componentY += 140;
+    Label l = new Label("Comment:", x + 15, componentY);
+    addChild(l);
+    
+    componentY += 20;
+    comment = new TextInput(x + 5, componentY, 700, 90, false, true, true, "");
+    addChild(comment);
     
      
   }
@@ -20,6 +26,7 @@ class SaveDialog extends Dialog {
     if (emailStr.isEmpty()) {
       return;
     }
+    String commentStr = comment.getValue().trim();
     String filename = canvas.save();
     String[] lines = loadStrings("output/output.txt");
     String[] newLines;
@@ -30,7 +37,7 @@ class SaveDialog extends Dialog {
     else {
       newLines = new String[1];
     }
-    newLines[newLines.length-1] = filename + " : " + emailStr;
+    newLines[newLines.length-1] = filename + ": email=" + emailStr + " ,comment=" + commentStr;
     saveStrings("output/output.txt", newLines);
     close();
   }
