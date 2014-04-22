@@ -51,8 +51,7 @@ class Canvas extends Container {
     noFill();
     rect(x, y, w, h);
     popStyle();
-    */
-    
+    */ 
   }
 
   PGraphics getImage() {
