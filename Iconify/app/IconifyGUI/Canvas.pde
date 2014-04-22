@@ -6,7 +6,7 @@ class Canvas extends Container {
   Canvas(int x, int y, int w, int h) {
     super(x, y, w, h);
     img = createGraphics(w, h);
-    PFont font = loadFont("Monospaced-48.vlw");
+    PFont font = loadFont("Arial-Black-48.vlw");
     img.beginDraw();
     img.background(color(255));
     img.textAlign(LEFT, TOP);

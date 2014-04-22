@@ -2,7 +2,7 @@ class SaveDialog extends Dialog {
   TextInput email,comment;
   
   SaveDialog() {
-    super("Enter email:", 900, 400, true);
+    super("Email (required):", 900, 400, true);
     setMsgX(15);
     setMsgY(30);
 

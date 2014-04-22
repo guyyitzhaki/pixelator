@@ -27,7 +27,7 @@ void setup() {
   regCursor = loadImage("regcursor.png");
   buttonCursor = loadImage("buttoncursor.png");
   
-  PFont font = loadFont("Monospaced-16.vlw");
+  PFont font = loadFont("Arial-Black-16.vlw");
   textFont(font);
   float listWidth = width - 300;
   int listX = 150;
