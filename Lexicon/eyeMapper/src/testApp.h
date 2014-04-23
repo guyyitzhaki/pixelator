@@ -2,6 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxMtlMapping2D.h"
+#include "ofxImageSequence.h"
+
+#define NUM_VIDEOS 256
 
 class testApp : public ofBaseApp{
 
@@ -20,7 +23,16 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+        void loadImageSequences();
+        void switchSequence();
     private:
+        bool loaded;
+        int index;
         ofxMtlMapping2D* _mapping;
+        ofxImageSequence	sequences[NUM_VIDEOS];
+        int sliceWidth, sliceHeight;
+        int lastSwitch;
+        int switchEvery;
+
 
 };
