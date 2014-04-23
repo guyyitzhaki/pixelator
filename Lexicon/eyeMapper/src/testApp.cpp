@@ -27,8 +27,8 @@ void testApp::update() {
 //--------------------------------------------------------------
 void testApp::draw() {
 	// ----
-	_mapping->bind();
 	if (loaded) {
+        _mapping->bind();
 		int xOffset = 0;
 		int yOffset = 0;
 
@@ -53,9 +53,9 @@ void testApp::draw() {
 		        }
 		    }
 		*/
+        _mapping->unbind();
+        _mapping->draw();
 	}
-	_mapping->unbind();
-	_mapping->draw();
 }
 
 void testApp::loadImageSequences() {
