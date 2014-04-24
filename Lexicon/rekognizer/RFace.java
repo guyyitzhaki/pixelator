@@ -1,13 +1,11 @@
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.data.FloatDict;
-import java.util.*;
+import java.util.ArrayList;
 
 public class RFace {
 
@@ -41,11 +39,11 @@ public class RFace {
   public String gender;
   public float gender_rating;
 
+
   public String race;
   public float race_rating;
 
-  public ArrayList<RValue> emotions = new ArrayList<RValue>();;
-
+  public ArrayList<RValue> emotions = new ArrayList<RValue>();
 
   public float photoWidth = 100;
   public float photoHeight = 100;
@@ -159,6 +157,10 @@ public class RFace {
     json = s;
   }
 
+  public ArrayList<RValue> getEmotions() {
+    return emotions;
+  }
+
   public String getJSON() {
     return json;
   }
@@ -199,7 +201,7 @@ public class RFace {
   }
 
 
-  public void setBox(JSONObject box) throws JSONException {
+  public void setBox(JSONObject box) {
     setTopLeft(jsonPVector(box, "tl"));
     JSONObject size = box.getJSONObject("size");
     setWidth(size.getDouble("width"));
@@ -212,69 +214,55 @@ public class RFace {
   }
 
 
-  public void fromJSON(String content) {
-    try {
-      JSONObject data = new JSONObject(content);
-      fromJSON(data);
-    } 
-    catch (JSONException e) {
-      e.printStackTrace();
-    }
-  }
+  /*public void fromJSON(String content) {
+   JSONObject data = p5.parseJSONObject(content);
+   fromJSON(data);
+   }*/
 
   public void fromJSON(JSONObject json) {
+    setJSON(json.toString());
+    setBox(json.getJSONObject("boundingbox"));
+    setConfidence(json.getDouble("confidence"));
+
+    setEyeLeft(jsonPVector(json, "eye_left"));
+    setEyeRight(jsonPVector(json, "eye_right"));
+    setNose(jsonPVector(json, "nose"));
+    setMouthLeft(jsonPVector(json, "mouth_l"));
+    setMouthRight(jsonPVector(json, "mouth_r"));
+
+    setAge(json.getDouble("age"));
+    setSmile(json.getDouble("smile"));
+    setGender(json.getDouble("sex"));
+    setGlasses(json.getDouble("glasses"));
+    setEyesClosed(json.getDouble("eye_closed"));
     try {
-      setJSON(json.toString());
-      setBox(json.getJSONObject("boundingbox"));
-      setConfidence(json.getDouble("confidence"));
-
-      setEyeLeft(jsonPVector(json, "eye_left"));
-      setEyeRight(jsonPVector(json, "eye_right"));
-      setNose(jsonPVector(json, "nose"));
-      setMouthLeft(jsonPVector(json, "mouth_l"));
-      setMouthRight(jsonPVector(json, "mouth_r"));
-
-      setAge(json.getDouble("age"));
-      setSmile(json.getDouble("smile"));
-      setGender(json.getDouble("sex"));
-      setGlasses(json.getDouble("glasses"));
-      setEyesClosed(json.getDouble("eye_closed"));
-
-
       JSONObject emotionsObj = json.getJSONObject("emotion");
-      System.out.println(emotionsObj);
-      for (int i = 0; i < JSONObject.getNames(emotionsObj).length; i++) {
-        String name = JSONObject.getNames(emotionsObj)[i];
+      String[] jsonnames = org.json.JSONObject.getNames(new org.json.JSONObject(emotionsObj.toString()));
+      for (int i = 0; i < jsonnames.length; i++) {
+        String name = jsonnames[i];
+        System.out.println(name);
         float rating = (float)emotionsObj.getDouble(name);
         emotions.add(new RValue(name, rating));
-      } 
-      System.out.println(json.toString());
-
-      if (json.has("matches")) {
-        JSONArray matches = json.getJSONArray("matches");
-        names = new FloatDict();
-
-        for (int i = 0; i < matches.length(); i++) {
-          JSONObject match = matches.getJSONObject(i);
-          names.set(match.getString("tag"), (float)match.getDouble("score"));
-        }
       }
     } 
-    catch (JSONException e) {
-      //e.printStackTrace();
+    catch (org.json.JSONException e) {
+      System.out.println("ERROR parsing emotions: " +e);
+    } 
+    if (json.hasKey("matches")) {
+      JSONArray matches = json.getJSONArray("matches");
+      names = new FloatDict();
+
+      for (int i = 0; i < matches.size(); i++) {
+        JSONObject match = matches.getJSONObject(i);
+        names.set(match.getString("tag"), (float)match.getDouble("score"));
+      }
     }
   }
 
-  private PVector jsonPVector(JSONObject obj, String s) throws JSONException {
-    try {
-      JSONObject point = obj.getJSONObject(s);
-      PVector v = new PVector((float)point.getDouble("x"), (float)point.getDouble("y"));
-      return v;
-    } 
-    catch (JSONException e) {
-      e.printStackTrace();
-      return new PVector(-1, -1);
-    }
+  private PVector jsonPVector(JSONObject obj, String s) {
+    JSONObject point = obj.getJSONObject(s);
+    PVector v = new PVector((float)point.getDouble("x"), (float)point.getDouble("y"));
+    return v;
   }
 
   public float left() {

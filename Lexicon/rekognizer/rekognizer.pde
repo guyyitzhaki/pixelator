@@ -1,6 +1,12 @@
 import processing.video.*;
-import httprocessing.*;
+import http.requests.*;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
+
+import processing.core.PVector;
+import processing.data.FloatDict;
+import java.io.File;
 
 Capture cam;
 Rekognition rekog;
@@ -37,7 +43,6 @@ void draw() {
     cam.read();
   }
   image(cam, width-128, height-96, 128, 96);
-  
 }
 
 void captureImage() {
@@ -50,7 +55,7 @@ void detect() {
   println("detecting" + lastFile);
   faces = rekog.detect(lastFile);
   PImage img = loadImage(lastFile);
-  
+
   for (int i = 0; i < faces.length; i++) {
     int facex = (int)(faces[i].center.x-(faces[i].w/2));
     int facey = (int)(faces[i].center.y-(faces[i].h/2));
@@ -75,11 +80,14 @@ void detect() {
     display += "Glasses: " + faces[i].glasses + "   ("+nf(faces[i].glasses_rating, 1, 2) +")\n";// Glasses
     display += "Glasses rating: " + nf(faces[i].glasses_rating, 1, 2) + "\n";   // Glasses from 0 to 1
     display += "Eyes closed: " + faces[i].eyes_closed  + "   ("+nf(faces[i].eyes_closed_rating, 1, 2) +")\n";                             // Eyes closed
+
     for (int j = 0; j < faces[i].emotions.size(); j++) {
       display += faces[i].emotions.get(j).getName() + ": "+faces[i].emotions.get(j).getRating()+"\n";
     }
+
+
     text(display, curx + faces[i].w, cury+12);
-    
+
     cury += faces[i].h;
     if (faces[i].w > maxw) 
       maxw = (int)faces[i].w;
@@ -87,9 +95,9 @@ void detect() {
       cury = 0;
       curx += maxw;
       maxw = 0;
-    }  
+    }
   }
-  
+
   println("done");
 } 
 
@@ -101,5 +109,4 @@ void keyPressed() {
     break;
   }
 }
-
 
