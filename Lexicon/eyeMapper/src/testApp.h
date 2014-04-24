@@ -5,6 +5,7 @@
 #include "ofxImageSequence.h"
 
 #define NUM_VIDEOS 256
+#define FRAME_RATE 12
 
 class testApp : public ofBaseApp {
 
@@ -33,6 +34,8 @@ private:
 	int sliceWidth, sliceHeight;
 	int lastSwitch;
 	int switchEvery;
+
+	void setupSequence(int idx, string path);
 
 
 };

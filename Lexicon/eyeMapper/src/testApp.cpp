@@ -12,6 +12,7 @@ void testApp::setup() {
 	// ----
 	_mapping = new ofxMtlMapping2D();
 	_mapping->init(ofGetWidth(), ofGetHeight(), "mapping/xml/shapes.xml", "mapping/controls/mapping.xml");
+
 }
 
 //--------------------------------------------------------------
@@ -29,6 +30,9 @@ void testApp::draw() {
 	// ----
 	if (loaded) {
         _mapping->bind();
+        ofBackground(0);
+        ofSetColor(255);
+
 		int xOffset = 0;
 		int yOffset = 0;
 
@@ -39,20 +43,8 @@ void testApp::draw() {
 				xOffset = 0;
 				yOffset += sliceHeight;
 			}
+        }
 
-		}
-		/*   int gridSize = 64;
-		    for (int x = 0; x < ofGetWidth(); x += gridSize) {
-		        for (int y = 0; y < ofGetHeight(); y += gridSize) {
-		            ofFill();
-		            ofSetColor(ofColor::red);
-		            ofRect(x, y, gridSize, gridSize);
-		            ofNoFill();
-		            ofSetColor(ofColor::black);
-		            ofRect(x, y, gridSize, gridSize);
-		        }
-		    }
-		*/
         _mapping->unbind();
         _mapping->draw();
 	}
@@ -79,9 +71,7 @@ void testApp::loadImageSequences() {
 	if (loaded) {
 		for (int i = 0; i < NUM_VIDEOS; i++) {
 			int idx = (int) ofRandom(directories.size());
-			sequences[i].loadSequence(directories[idx]);
-			sequences[i].preloadAllFrames();
-			sequences[i].setFrameRate(15);
+			setupSequence(i, directories[idx]);
 		}
 	}
 	index = maxIndex + 1;
@@ -95,14 +85,22 @@ void testApp::switchSequence() {
 	sprintf(path,  "%s%.4i" , "recording", vididx);
 	cout << "loading " << path << " to " << seqidx << loaded << "\n";
 	sequences[seqidx].unloadSequence();
-	sequences[seqidx].loadSequence(path);
-	sequences[seqidx].preloadAllFrames();
+	setupSequence(seqidx, path);
 
+}
+
+void testApp::setupSequence(int idx, string path) {
+	sequences[idx].loadSequence(path);
+	sequences[idx].preloadAllFrames();
+    sequences[idx].setFrameRate(FRAME_RATE);
 }
 
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key) {
+    if (key == '+') {
+
+    }
 }
 
 //--------------------------------------------------------------
