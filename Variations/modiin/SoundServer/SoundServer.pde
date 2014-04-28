@@ -50,7 +50,6 @@ void setup() {
 }
 
 
-
 void draw() {
   TM.check();
   background(0);
@@ -127,7 +126,7 @@ void handleMessage(String msg, String param) {
 
 void fillSoundDirs() {
 
-  String[] soundDirs = listFileNames(soundPath, false, "mp3");
+  String[] soundDirs = listFileNames(soundPath, false, "");
   for (int i = 0; i < soundDirs.length; i++) {
     String fname = soundDirs[i];
     int initial = INITIAL_WAIT;
