@@ -126,7 +126,7 @@ void handleMessage(String msg, String param) {
 
 void fillSoundDirs() {
 
-  String[] soundDirs = listFileNames(soundPath, false, "");
+  String[] soundDirs = listFileNames(soundPath);
   for (int i = 0; i < soundDirs.length; i++) {
     String fname = soundDirs[i];
     int initial = INITIAL_WAIT;
@@ -145,6 +145,7 @@ void fillSoundDirs() {
           second = int(secondStr);
         } 
         catch (NumberFormatException nfe) {
+          log("bad format" + fname);
         }
       }
       else {
@@ -152,6 +153,7 @@ void fillSoundDirs() {
           initial = int(times);
         } 
         catch (NumberFormatException nfe) {
+          log("bad format" + fname);
         }
       }
     }
@@ -164,7 +166,7 @@ void fillSoundDirs() {
 
 void playAndRegister(final String path, final int dirnum, boolean stopOthers, String method, int wait) {
   String spath = path + sep + dirnum;
-  String[] fileNames = listFileNames(spath, true, "mp3");
+  String[] fileNames = listFileNames(spath, "mp3");
   if (fileNames == null) {
     log("no directory " +dirnum);
     return;
