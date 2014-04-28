@@ -80,7 +80,7 @@ void handleMessage(String msg) {
 
 void fillSoundDirs() {
 
-  String[] soundDirs = listFileNames(soundPath, false);
+  String[] soundDirs = listFileNames(soundPath, false, "mp3");
   for (int i = 0; i < soundDirs.length; i++) {
     String fname = soundDirs[i];
     int initial = INITIAL_WAIT;

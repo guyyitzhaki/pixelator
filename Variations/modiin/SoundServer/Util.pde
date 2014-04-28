@@ -1,4 +1,4 @@
-String[] listFileNames(String dir, boolean filter) {
+String[] listFileNames(String dir, boolean filter, final String suffix) {
   File file = new File(dir);
 
   if (file.isDirectory()) {
@@ -6,7 +6,7 @@ String[] listFileNames(String dir, boolean filter) {
       return file.list();
     String names[] = file.list(new FilenameFilter() {
       public boolean accept(File dir, String name) {
-        return name.endsWith("mp3");
+        return name.endsWith(suffix);
       }
     }
     );
