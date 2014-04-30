@@ -1,0 +1,76 @@
+html, body {
+  margin: 0px;
+  padding: 0px;
+  background: #E4E4E4;
+  color: #999999;
+  height: 100%;
+  font-family: 'Droid Sans Mono', '';   
+  font-size: 12px;
+}
+
+.title {
+	color: #E8173A;
+	font-weight: 400;
+}
+
+.desc {
+  background:#181818;
+  color:#AAAAAA;
+  font-size: 11px;
+  letter-spacing:0.5px;
+  line-height:18px;
+  margin: 1px 0px 0px 0px;
+  padding:4px;
+  width:246px;
+  height:50px;
+}
+
+a {
+  color: #BBBBBB;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #E8173A;
+  text-decoration: none;
+}
+
+.projectTitle {
+	font-size: 14px; 
+	font-weight: 700; 
+	color: #F0F0F0; 
+}
+
+.seperator {
+  width: 120px;
+  margin: 20px 0px 20px 0px;
+  border-bottom: 1px solid #666666;
+}
+
+#container {
+  /*border: 1px solid #666;*/
+  padding: 1px 1px 1px 2px;
+  margin-bottom: 20px;
+}
+
+
+.project {
+  background:#202020;
+  width: auto;
+  margin: 10px;
+  float: left;
+}
+
+.project img {
+  display: block;
+  /*width: 100%;*/
+}
+
+#content {
+  margin-left: 210px;
+}
+
+.portfolio #content {
+  height: 100%;
+}
+
