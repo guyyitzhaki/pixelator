@@ -171,12 +171,6 @@
 		<Unit filename="../../../addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
 			<Option virtualFolder="addons\ofxXmlSettings\libs" />
 		</Unit>
-		<Unit filename="../../../addons\ofxImageSequence\src\ofxImageSequence.cpp">
-			<Option virtualFolder="addons\ofxImageSequence\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxImageSequence\src\ofxImageSequence.h">
-			<Option virtualFolder="addons\ofxImageSequence\src" />
-		</Unit>
 		<Unit filename="../../../addons\ofxMSAInteractiveObject\src\ofxMSAInteractiveObject.cpp">
 			<Option virtualFolder="addons\ofxMSAInteractiveObject\src" />
 		</Unit>
