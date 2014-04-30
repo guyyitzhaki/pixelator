@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+    config = false;
+    ofHideCursor();
     ofSetFrameRate(60);
     ofBackground(50);
     lastSwitch = ofGetElapsedTimef();
@@ -116,7 +118,15 @@ void ofApp::setupVideo(int idx, string path)
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-
+    if (key == 'm') {
+        config = !config;
+        if (config) {
+            ofShowCursor();
+        }
+        else {
+            ofHideCursor();
+        }
+    }
 }
 
 //--------------------------------------------------------------

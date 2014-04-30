@@ -36,6 +36,7 @@ private:
     int sliceWidth, sliceHeight;
     int lastSwitch;
     int switchEvery;
+    bool config;
 
     void setupVideo(int idx, string path);
 
