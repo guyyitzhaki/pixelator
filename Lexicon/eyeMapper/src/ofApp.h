@@ -5,9 +5,9 @@
 #include "ofxImageSequence.h"
 
 #define NUM_VIDEOS 256
-#define FRAME_RATE 12
 
-class testApp : public ofBaseApp
+
+class ofApp : public ofBaseApp
 {
 
 public:
@@ -25,18 +25,19 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-    void loadImageSequences();
-    void switchSequence();
+    vector<string> getVideos();
+    string getRandomVideo();
+    void loadVideos();
+    void switchVideo();
 private:
     bool loaded;
-    int index;
     ofxMtlMapping2D* _mapping;
-    ofxImageSequence	sequences[NUM_VIDEOS];
+    ofVideoPlayer	videos[NUM_VIDEOS];
     int sliceWidth, sliceHeight;
     int lastSwitch;
     int switchEvery;
 
-    void setupSequence(int idx, string path);
+    void setupVideo(int idx, string path);
 
 
 };
