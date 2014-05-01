@@ -50,8 +50,6 @@ void ofApp::setup()
     camHeight 	= 480;
     sliceWidth  = 72;
     sliceHeight = 64;
-    showCam = true;
-    track = true;
     vector<ofVideoDevice> devices = cam.listDevices();
     for(int i = 0; i < devices.size(); i++)
     {
@@ -67,13 +65,10 @@ void ofApp::setup()
     }
 
     cam.setDeviceID(0);
-//	cam.setDesiredFrameRate(30);
     cam.initGrabber(camWidth,camHeight);
 
     loaded = false;
-    index = 1;
     recording = true;
-    writing = false;
     frameCount = 0;
 
     setupRecorder();
@@ -90,14 +85,15 @@ void ofApp::setupRecorder()
     left = !left;
     recorder = new ofxQtVideoSaver();
     recorder->setCodecQualityLevel(OF_QT_SAVER_CODEC_QUALITY_NORMAL);
-    recorder->setup(sliceWidth, sliceHeight, "eye" + ofGetTimestampString("%m%d%H%M%S") + ".mov");
+    filename = ofGetTimestampString("%m%d%H%M%S") + ".mov";
+    recorder->setup(sliceWidth, sliceHeight, filename);
 }
 
 //--------------------------------------------------------------
 void ofApp::update()
 {
     cam.update();
-    if(track && cam.isFrameNew())
+    if(cam.isFrameNew())
     {
         tracker.update(toCv(cam));
         position = tracker.getPosition();
@@ -193,9 +189,9 @@ void ofApp::update()
                 frameCount++;
                 cout << frameCount << " ";
 
-                if (ofGetElapsedTimef() - blinkTime > 1) {
+                if (ofGetElapsedTimeMillis() - blinkTime > 500) {
                     blinkOn = !blinkOn;
-                    blinkTime = ofGetElapsedTimef();
+                    blinkTime = ofGetElapsedTimeMillis();
                 }
                 if (frameCount == MAX_FRAMES)
                 {
@@ -203,35 +199,50 @@ void ofApp::update()
                     blinkOn = false;
                     recorder->finishMovie();
                     frameCount = 0;
-                    cout << "done\n";
+                    video_data *vd = new video_data();
+                    vd->filename = filename;
+                    vd->time = ofGetElapsedTimef();
+                    filename = "";
+                    finished.push_back(vd);
+                    cout <<  "done at " << ofGetElapsedTimef() << "\n";
                 }
-
             }
         }
     }
+    float now = ofGetElapsedTimef();
+    for (int i = finished.size() - 1; i >= 0; i--) {
+        if (now - finished[i]->time > WRITE_DELAY) {
+            cout << "renaming at " << ofGetElapsedTimef() << endl;
+            string newname = "eye-" + finished[i]->filename;
+            ofFile f(finished[i]->filename);
+            f.moveTo("done\\eye" + finished[i]->filename);
+            delete finished[i];
+            finished.erase(finished.begin() + i);
+        }
+    }
+
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-    ofSetColor(255);
-    if (showCam)
-    {
-        int x = ofGetWidth()/2 - camWidth / 2;
-        int y = ofGetHeight() / 2 - camHeight / 2;
-        ofTranslate(x,y);
-        cam.draw(0,0);
-        tracker.draw();
-        if (blinkOn) {
-            ofSetColor(ofColor::red);
-            ofFill();
-            ofCircle(50,50,10,10);
-        }
-        ofTranslate(-x,-y);
-
+    ofSetColor(ofColor::white);
+    int x = ofGetWidth()/2 - camWidth / 2;
+    int y = ofGetHeight() / 2 - camHeight / 2;
+    ofTranslate(x,y);
+    cam.draw(0,0);
+    tracker.draw();
+    if (blinkOn) {
+        ofSetColor(ofColor::red);
+        ofFill();
+        ofCircle(50,50,10,10);
     }
+    ofTranslate(-x,-y);
+
+    ofSetColor(ofColor::white);
     stringstream reportStream;
     reportStream << "fps " << ofGetFrameRate() << endl;
+    reportStream << "file " << filename << endl;
     ofDrawBitmapString(reportStream.str(), 20,20);
 }
 
@@ -247,9 +258,9 @@ void ofApp::keyPressed(int key)
     }
     if (key == 's')
     {
-        string filename;
-        filename = "screen" + ofGetTimestampString("%n%e%H%M%S") + ".png";
-        ofSaveScreen(filename);
+        string fname;
+        fname = "screen" + ofGetTimestampString("%n%e%H%M%S") + ".png";
+        ofSaveScreen(fname);
     }
 }
 

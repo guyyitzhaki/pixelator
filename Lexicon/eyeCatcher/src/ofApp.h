@@ -5,8 +5,14 @@
 #include "ofxFaceTracker.h"
 #include "ofxQtVideoSaver.h"
 
-#define MAX_FRAMES 180
+#define MAX_FRAMES 60
 #define NUM_VIDEOS 256
+#define WRITE_DELAY 10
+
+struct video_data {
+    string filename;
+    float time;
+};
 
 class ofApp : public ofBaseApp
 {
@@ -36,7 +42,6 @@ public:
     ofxQtVideoSaver *recorder;
     ofVideoGrabber cam;
 
-
     ofFbo eyeFbo;
     ofMesh leftRectImg, rightRectImg;
 
@@ -44,19 +49,15 @@ public:
     float scale;
     ofMatrix4x4 rotationMatrix;
 
-    bool showCam;
-    bool track;
+    string filename;
+    vector<video_data *> finished;
+
     bool recording;
-    bool writing;
     int frameCount;
-    int index;
     bool left;
     bool loaded;
 
     float blinkTime;
     bool blinkOn;
-
-
-
 
 };
