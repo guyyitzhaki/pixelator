@@ -89,7 +89,6 @@ void ofApp::cleanup() {
     for(int i = 0; i < dir.numFiles(); i++){
         doomed.removeFile(dir.getPath(i));
     }
-
 }
 
 void ofApp::setupRecorder()

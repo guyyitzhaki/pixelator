@@ -24,6 +24,9 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
+    void loadCameraCalibration();
+    ofRectangle screen2projector(ofRectangle r);
+    ofRectangle kinect2screen(ofRectangle r);
     void saveSettings();
     void loadSettings();
     void setFullScreen();
@@ -44,6 +47,10 @@ public:
 
     bool showControls;
     bool fullscreen;
+
+    ofRectangle projectionArea;
+
+
 
 
 };

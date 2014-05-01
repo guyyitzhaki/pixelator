@@ -4,14 +4,14 @@
 void ofApp::setup()
 {
     showControls = true;
-    fullscreen = false;
+    fullscreen = true;
     setFullScreen();
     ofBackground(ofColor::black);
 
     // enable depth->video image calibration?
     kinect.setRegistration(false);
 
-    // turn off video cam to save cpu
+    // turn off video cam and texture to save cpu
     kinect.init(false, true);
 
     kinect.open();
@@ -20,9 +20,8 @@ void ofApp::setup()
 
     ofSetFrameRate(60);
 
+    loadCameraCalibration();
     loadSettings();
-
-
 }
 
 void ofApp::setFullScreen()
@@ -44,7 +43,7 @@ void ofApp::update()
 
         // load grayscale depth image from the kinect source
         depthImage.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
-
+        //depthImage.mirror(false,true);
         // we do two thresholds - one for the far plane and one for the near plane
         // we then do a cvAnd to get the pixels which are a union of the two thresholds
         grayThreshNear = depthImage;
@@ -56,7 +55,7 @@ void ofApp::update()
         // update the cv images
         depthImage.flagImageChanged();
 
-        contourFinder.findContours(depthImage, 50, (kinect.width*kinect.height)/2, 2, false);
+        contourFinder.findContours(depthImage, 100, (kinect.width*kinect.height)/2, 2, false);
     }
 
 
@@ -106,18 +105,20 @@ void ofApp::draw()
     }
     else
     {
+        ofFill();
+        ofSetColor(ofColor::white);
+        ofRect(0,0,ofGetWidth(), ofGetHeight());
+
         for(int i = 0; i < contourFinder.nBlobs; i++)
         {
             ofRectangle r = contourFinder.blobs.at(i).boundingRect;
-            r.x = ofMap(r.x, 0, kinect.width, 0, ofGetWidth());
-            r.y = ofMap(r.y, 0, kinect.height, 0, ofGetHeight());
-            r.setWidth(ofMap(r.getWidth(), 0, kinect.width, 0, ofGetWidth()));
-            r.setHeight(ofMap(r.getHeight(), 0, kinect.height, 0, ofGetHeight()));
-            ofNoFill();
-            ofSetColor(ofColor::white);
-            ofRect(r);
-            float centerX = r.x + r.getWidth()/2;
-            float centerY = r.y + r.getHeight()/2;
+            ofRectangle scr = kinect2screen(r);
+            ofRectangle translated = screen2projector(scr);
+            ofFill();
+            ofSetColor(ofColor::lightGreen);
+            ofRect(translated);
+            float centerX = translated.x + translated.getWidth()/2;
+            float centerY = translated.y + translated.getHeight()/2;
 
             ofSetColor(ofColor::red);
             ofLine(centerX - 15, centerY, centerX + 15, centerY);
@@ -126,6 +127,24 @@ void ofApp::draw()
         }
     }
 
+}
+
+ofRectangle ofApp::kinect2screen(ofRectangle r) {
+    float x = ofMap(r.x, 0,  kinect.width, 0, ofGetWidth());
+    float y = ofMap(r.y, 0,  kinect.height, 0, ofGetHeight());
+    float w = ofMap(r.getWidth(), 0,  kinect.width, 0, ofGetWidth());
+    float h = ofMap(r.getHeight(), 0,  kinect.height, 0, ofGetHeight());
+    return ofRectangle(x,y,w,h);
+}
+
+ofRectangle ofApp::screen2projector(ofRectangle r) {
+    int tx = r.x - projectionArea.x;
+    int ty = r.y - projectionArea.y;
+    float x = ofMap(tx, 0, projectionArea.getWidth(), 0, ofGetWidth());
+    float y = ofMap(ty, 0, projectionArea.getHeight(), 0, ofGetHeight());
+    float w = ofMap(r.getWidth(), 0,  projectionArea.getWidth(), 0, ofGetWidth());
+    float h = ofMap(r.getHeight(), 0,  projectionArea.getHeight(), 0, ofGetHeight());
+    return ofRectangle(x,y,w,h);
 }
 
 void ofApp::exit()
@@ -155,6 +174,49 @@ void ofApp::loadSettings()
     bool on = settings.getValue("settings:led", false);
     if (!on)
         kinect.setLed(ofxKinect::LED_OFF);
+}
+
+void ofApp::loadCameraCalibration()
+{
+    ofxXmlSettings settings;
+    settings.loadFile("kinect.xml");
+    int TL = 0, TR = 1, BR = 2, BL = 3;
+    ofPoint points[4];
+    int maxx = -1, maxy = -1, minx = ofGetWidth(), miny = ofGetHeight();
+    int x = settings.getValue("settings:TL.X", points[TL].x);
+    int y = settings.getValue("settings:TL.Y", points[TL].y);
+    maxx = max(x, maxx);
+    maxy = max(y, maxy);
+    minx = min(x, minx);
+    miny = min(y, miny);
+    x = settings.getValue("settings:TR.X", points[TR].x);
+    y = settings.getValue("settings:TR.Y", points[TR].y);
+    maxx = max(x, maxx);
+    maxy = max(y, maxy);
+    minx = min(x, minx);
+    miny = min(y, miny);
+    x = settings.getValue("settings:BR.X", points[BR].x);
+    y = settings.getValue("settings:BR.Y", points[BR].y);
+    maxx = max(x, maxx);
+    maxy = max(y, maxy);
+    minx = min(x, minx);
+    miny = min(y, miny);
+    x = settings.getValue("settings:BL.X", points[BL].x);
+    y = settings.getValue("settings:BL.Y", points[BL].y);
+    maxx = max(x, maxx);
+    maxy = max(y, maxy);
+    minx = min(x, minx);
+    miny = min(y, miny);
+
+    int camx = settings.getValue("settings:CAM.X", 0);
+    int camy = settings.getValue("settings:CAM.Y", 0);
+    minx -= camx;
+    maxx -= camx;
+    miny -= camy;
+    maxy -= camy;
+
+    cout << "(" << minx << "," << miny << ") - (" << maxx << "," << maxy << ")\n";
+    projectionArea.set(minx, miny, maxx-minx, maxy-miny);
 }
 
 //--------------------------------------------------------------
