@@ -71,12 +71,24 @@ void ofApp::setup()
     recording = true;
     frameCount = 0;
 
+    cleanup();
     setupRecorder();
 
     tracker.setup();
     eyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
     ofSetFrameRate(30);
     ofBackground(0);
+
+}
+
+void ofApp::cleanup() {
+    ofDirectory dir("");
+    dir.allowExt("mov");
+    dir.listDir();
+    ofFile doomed;
+    for(int i = 0; i < dir.numFiles(); i++){
+        doomed.removeFile(dir.getPath(i));
+    }
 
 }
 
@@ -187,7 +199,7 @@ void ofApp::update()
                 }
                 recorder->addFrame(eyeImage.getPixels(), 1/16.0f);
                 frameCount++;
-                cout << frameCount << " ";
+                //cout << frameCount << " ";
 
                 if (ofGetElapsedTimeMillis() - blinkTime > 500) {
                     blinkOn = !blinkOn;
@@ -202,20 +214,19 @@ void ofApp::update()
                     video_data *vd = new video_data();
                     vd->filename = filename;
                     vd->time = ofGetElapsedTimef();
-                    filename = "";
                     finished.push_back(vd);
+                    filename = "";
                     cout <<  "done at " << ofGetElapsedTimef() << "\n";
                 }
             }
         }
     }
+
     float now = ofGetElapsedTimef();
     for (int i = finished.size() - 1; i >= 0; i--) {
         if (now - finished[i]->time > WRITE_DELAY) {
-            cout << "renaming at " << ofGetElapsedTimef() << endl;
-            string newname = "eye-" + finished[i]->filename;
             ofFile f(finished[i]->filename);
-            f.moveTo("done\\eye" + finished[i]->filename);
+            f.copyTo("done\\eye" + finished[i]->filename);
             delete finished[i];
             finished.erase(finished.begin() + i);
         }
@@ -235,7 +246,7 @@ void ofApp::draw()
     if (blinkOn) {
         ofSetColor(ofColor::red);
         ofFill();
-        ofCircle(50,50,10,10);
+        ofCircle(40,40,10,10);
     }
     ofTranslate(-x,-y);
 

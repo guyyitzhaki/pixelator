@@ -33,6 +33,7 @@ public:
     void gotMessage(ofMessage msg);
 
     void setupRecorder();
+    void cleanup();
 
     int camWidth, camHeight;
     int sliceWidth, sliceHeight;
