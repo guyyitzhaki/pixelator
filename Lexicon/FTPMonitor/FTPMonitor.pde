@@ -113,35 +113,19 @@ void setupConnection() {
 
 void checkFiles() {
   File baseDir = new File(localPath);
-  File[] newDirs = findTransfers(baseDir);
-  
-  if (newDirs.length > 0) {
-    log("found "+newDirs.length+" new directories");
+  File[] newFiles = findTransfers(baseDir);
+
+  if (newFiles.length > 0) {
+    log("found "+newFiles.length+" new files");
     try {
       setupConnection();
-      for (int i = 0; i < newDirs.length; i++) {
-        log("checking "+newDirs[i]+"...");
-        File dir = newDirs[i];
-        String dirName = dir.getName();
-
-        if (!dirReady(dir)) {
-          log(dirName + " not done yet, skipping");
-            continue;
-        }
-        File[] files = getImgs(dir);
-        if (files.length > 0) {
-          log("creating dir" + dirName);
-          ftp.mkdir(dirName);
-          ftp.chdir(dirName);
-          for (int j = 0; j < files.length; j++) {
-            String fileName = files[j].getName();
-            log("   transferring " + fileName);
-            ftp.put(files[j].getAbsolutePath(), fileName);
-          }
-          ftp.chdir("..");
-        }
-        log("done, renaming");
-        dir.renameTo(new File(dir.getPath() + ".transferred"));
+      for (int i = 0; i < newFiles.length; i++) {
+        File f = newFiles[i];
+        log("checking "+f+"...");
+        String fileName = f.getName();
+        log("   transferring " + fileName);
+        ftp.put(f.getAbsolutePath(), fileName);
+        f.renameTo(new File(f.getParent(), "transferred"+f.getName()));
       }
       ftp.quit();
     }
@@ -162,23 +146,16 @@ boolean dirReady(File dir) {
   return indicator.length > 0;
 }
 
-File[] getImgs(File dir) {
-  return dir.listFiles(new java.io.FilenameFilter() {
-    public boolean accept(File dir, String name) {
-      return (name.endsWith("jpg") || name.endsWith("png"));
-    }
-  }
-  );
-}
+
 
 File[] findTransfers(File dir) {
   return dir.listFiles(new java.io.FileFilter() {
     public boolean accept(File f) {
-      if (f.isDirectory() && !(f.getName().endsWith("transferred")))
-        return true;
-      return false;
+      String name = f.getName();
+      return (name.endsWith("mov") && !name.startsWith("transferred"));
     }
-  });
+  }
+  );
 } 
 
 void mousePressed() {
