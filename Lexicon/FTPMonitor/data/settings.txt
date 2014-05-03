@@ -1,7 +1,0 @@
-host localhost
-port 27970
-user guyy
-password goomy
-remotePath  
-localPath c:/temp/transfer
-checkEvery 10
