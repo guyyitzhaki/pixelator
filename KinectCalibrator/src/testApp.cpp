@@ -10,6 +10,7 @@ void testApp::setup()
     kinect.init(false, true);
 
     kinect.open();
+    kinect.setCameraTiltAngle(6);
     ofSetFullscreen(true);
     int gap = 20;
     points[TL] = ofPoint(gap,gap);
@@ -70,42 +71,47 @@ void testApp::draw()
 
 void testApp::saveSettings()
 {
-    ofxXmlSettings settings;
-    settings.setValue("settings:CAM.X", camX);
-    settings.setValue("settings:CAM.Y", camY);
-    settings.setValue("settings:CAM.W", camW);
-    settings.setValue("settings:CAM.H", camH);
-    settings.setValue("settings:TL.X", points[TL].x);
-    settings.setValue("settings:TL.Y", points[TL].y);
-    settings.setValue("settings:TR.X", points[TR].x);
-    settings.setValue("settings:TR.Y", points[TR].y);
-    settings.setValue("settings:BR.X", points[BR].x);
-    settings.setValue("settings:BR.Y", points[BR].y);
-    settings.setValue("settings:BL.X", points[BL].x);
-    settings.setValue("settings:BL.Y", points[BL].y);
-    settings.saveFile("kinect.xml");
+    ofxXmlSettings calibration;
+    calibration.setValue("calibration:CAM.ANGLE", angle);
+    calibration.setValue("calibration:CAM.X", camX);
+    calibration.setValue("calibration:CAM.Y", camY);
+    calibration.setValue("calibration:CAM.W", camW);
+    calibration.setValue("calibration:CAM.H", camH);
+    calibration.setValue("calibration:TL.X", points[TL].x);
+    calibration.setValue("calibration:TL.Y", points[TL].y);
+    calibration.setValue("calibration:TR.X", points[TR].x);
+    calibration.setValue("calibration:TR.Y", points[TR].y);
+    calibration.setValue("calibration:BR.X", points[BR].x);
+    calibration.setValue("calibration:BR.Y", points[BR].y);
+    calibration.setValue("calibration:BL.X", points[BL].x);
+    calibration.setValue("calibration:BL.Y", points[BL].y);
+    calibration.saveFile("calibration.xml");
 }
 
 void testApp::loadSettings()
 {
-    ofxXmlSettings settings;
-    settings.loadFile("kinect.xml");
-    int x = settings.getValue("settings:TL.X", points[TL].x);
-    int y = settings.getValue("settings:TL.Y", points[TL].y);
+    ofxXmlSettings calibration;
+    calibration.loadFile("calibration.xml");
+    int x = calibration.getValue("calibration:TL.X", points[TL].x);
+    int y = calibration.getValue("calibration:TL.Y", points[TL].y);
     points[TL].x = x;
     points[TL].y = y;
-    x = settings.getValue("settings:TR.X", points[TR].x);
-    y = settings.getValue("settings:TR.Y", points[TR].y);
+    x = calibration.getValue("calibration:TR.X", points[TR].x);
+    y = calibration.getValue("calibration:TR.Y", points[TR].y);
     points[TR].x = x;
     points[TR].y = y;
-    x = settings.getValue("settings:BR.X", points[BR].x);
-    y = settings.getValue("settings:BR.Y", points[BR].y);
+    x = calibration.getValue("calibration:BR.X", points[BR].x);
+    y = calibration.getValue("calibration:BR.Y", points[BR].y);
     points[BR].x = x;
     points[BR].y = y;
-    x = settings.getValue("settings:BL.X", points[BL].x);
-    y = settings.getValue("settings:BL.Y", points[BL].y);
+    x = calibration.getValue("calibration:BL.X", points[BL].x);
+    y = calibration.getValue("calibration:BL.Y", points[BL].y);
     points[BL].x = x;
     points[BL].y = y;
+
+    angle = calibration.getValue("calibration:CAM.ANGLE", 0);
+    kinect.setCameraTiltAngle(angle);
+
 }
 
 
@@ -113,33 +119,45 @@ void testApp::loadSettings()
 //--------------------------------------------------------------
 void testApp::keyPressed(int key)
 {
-    if (key == 's') {
+    switch(key) {
+    case 's':
         saveSettings();
-    }
-    else if (key == 'l') {
+        break;
+    case 'l':
         loadSettings();
-    }
-    else if (key == OF_KEY_UP) {
+        break;
+    case OF_KEY_UP:
         if (current != -1) {
             points[current].y--;
         }
-    }
-    else if (key == OF_KEY_DOWN) {
+        break;
+    case OF_KEY_DOWN:
         if (current != -1) {
             points[current].y++;
         }
-    }
-    else if (key == OF_KEY_LEFT) {
+        break;
+    case OF_KEY_LEFT:
         if (current != -1) {
             points[current].x--;
         }
-    }
-    else if (key == OF_KEY_RIGHT) {
+        break;
+    case OF_KEY_RIGHT:
         if (current != -1) {
             points[current].x++;
         }
+        break;
+    case '+':
+    case '=':
+        angle++;
+        if(angle>30) angle=30;
+        kinect.setCameraTiltAngle(angle);
+        break;
+    case '-':
+        angle--;
+        if(angle<-30) angle=-30;
+        kinect.setCameraTiltAngle(angle);
+        break;
     }
-
 }
 
 //--------------------------------------------------------------

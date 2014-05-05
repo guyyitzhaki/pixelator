@@ -22,6 +22,13 @@ void ofApp::setup()
 
     loadCameraCalibration();
     loadSettings();
+
+    movie.loadMovie("fingers.mp4");
+	movie.play();
+	grayFrame.allocate(kinect.width, kinect.height);
+	frame.allocate(kinect.width, kinect.height);
+	masked.allocate(kinect.width, kinect.height);
+
 }
 
 void ofApp::setFullScreen()
@@ -36,7 +43,7 @@ void ofApp::setFullScreen()
 //--------------------------------------------------------------
 void ofApp::update()
 {
-
+    movie.update();
     kinect.update();
     if(kinect.isFrameNew())
     {
@@ -54,6 +61,7 @@ void ofApp::update()
 
         // update the cv images
         depthImage.flagImageChanged();
+
 
         contourFinder.findContours(depthImage, 100, (kinect.width*kinect.height)/2, 2, false);
     }
@@ -125,25 +133,43 @@ void ofApp::draw()
             ofLine(centerX, centerY - 15, centerX, centerY + 15);
             ofCircle(centerX, centerY, 10);
         }
+
+        ofSetColor(ofColor::white);
+        ofxCvGrayscaleImage trg = depthImage;
+        frame.setFromPixels(movie.getPixels(), kinect.width, kinect.height);
+        grayFrame = frame;
+        cvAnd(depthImage.getCvImage(), grayFrame.getCvImage(), trg.getCvImage(), NULL);
+        trg.flagImageChanged();
+        trg.draw(0,0, ofGetWidth(), ofGetHeight());
+
+
     }
 
 }
 
 ofRectangle ofApp::kinect2screen(ofRectangle r) {
-    float x = ofMap(r.x, 0,  kinect.width, 0, ofGetWidth());
-    float y = ofMap(r.y, 0,  kinect.height, 0, ofGetHeight());
-    float w = ofMap(r.getWidth(), 0,  kinect.width, 0, ofGetWidth());
-    float h = ofMap(r.getHeight(), 0,  kinect.height, 0, ofGetHeight());
+    float x = mapXtoW(r.x, kinect.width);
+    float y = mapYtoH(r.y, kinect.height);
+    float w = mapXtoW(r.getWidth(), kinect.width);
+    float h = mapYtoH(r.getHeight(), kinect.height);
     return ofRectangle(x,y,w,h);
+}
+
+float ofApp::mapXtoW(float val, float srcW) {
+    return ofMap(val, 0,  srcW, 0, ofGetWidth(), true);
+}
+
+float ofApp::mapYtoH(float val, float srcH) {
+    return ofMap(val, 0,  srcH, 0, ofGetHeight(), true);
 }
 
 ofRectangle ofApp::screen2projector(ofRectangle r) {
     int tx = r.x - projectionArea.x;
     int ty = r.y - projectionArea.y;
-    float x = ofMap(tx, 0, projectionArea.getWidth(), 0, ofGetWidth());
-    float y = ofMap(ty, 0, projectionArea.getHeight(), 0, ofGetHeight());
-    float w = ofMap(r.getWidth(), 0,  projectionArea.getWidth(), 0, ofGetWidth());
-    float h = ofMap(r.getHeight(), 0,  projectionArea.getHeight(), 0, ofGetHeight());
+    float x = mapXtoW(tx, projectionArea.getWidth());
+    float y = mapYtoH(ty, projectionArea.getHeight());
+    float w = mapXtoW(r.getWidth(),  projectionArea.getWidth());
+    float h = mapYtoH(r.getHeight(),  projectionArea.getHeight());
     return ofRectangle(x,y,w,h);
 }
 
@@ -158,7 +184,6 @@ void ofApp::saveSettings()
     ofxXmlSettings settings;
     settings.setValue("settings:nearThreshold", nearThreshold);
     settings.setValue("settings:farThreshold", farThreshold);
-    settings.setValue("settings:angle", angle);
     settings.setValue("settings:led", ledOn);
     settings.saveFile("settings.xml");
 }
@@ -169,8 +194,6 @@ void ofApp::loadSettings()
     settings.loadFile("settings.xml");
     nearThreshold = settings.getValue("settings:nearThreshold", 230);
     farThreshold = settings.getValue("settings:farThreshold", 70);
-    angle = settings.getValue("settings:angle", 0);
-    kinect.setCameraTiltAngle(angle);
     bool on = settings.getValue("settings:led", false);
     if (!on)
         kinect.setLed(ofxKinect::LED_OFF);
@@ -178,38 +201,42 @@ void ofApp::loadSettings()
 
 void ofApp::loadCameraCalibration()
 {
-    ofxXmlSettings settings;
-    settings.loadFile("kinect.xml");
+    ofxXmlSettings calibration;
+    calibration.loadFile("calibration.xml");
+
+    angle = calibration.getValue("calibration:CAM.ANGLE", 0);
+    kinect.setCameraTiltAngle(angle);
+
     int TL = 0, TR = 1, BR = 2, BL = 3;
     ofPoint points[4];
     int maxx = -1, maxy = -1, minx = ofGetWidth(), miny = ofGetHeight();
-    int x = settings.getValue("settings:TL.X", points[TL].x);
-    int y = settings.getValue("settings:TL.Y", points[TL].y);
+    int x = calibration.getValue("calibration:TL.X", points[TL].x);
+    int y = calibration.getValue("calibration:TL.Y", points[TL].y);
     maxx = max(x, maxx);
     maxy = max(y, maxy);
     minx = min(x, minx);
     miny = min(y, miny);
-    x = settings.getValue("settings:TR.X", points[TR].x);
-    y = settings.getValue("settings:TR.Y", points[TR].y);
+    x = calibration.getValue("calibration:TR.X", points[TR].x);
+    y = calibration.getValue("calibration:TR.Y", points[TR].y);
     maxx = max(x, maxx);
     maxy = max(y, maxy);
     minx = min(x, minx);
     miny = min(y, miny);
-    x = settings.getValue("settings:BR.X", points[BR].x);
-    y = settings.getValue("settings:BR.Y", points[BR].y);
+    x = calibration.getValue("calibration:BR.X", points[BR].x);
+    y = calibration.getValue("calibration:BR.Y", points[BR].y);
     maxx = max(x, maxx);
     maxy = max(y, maxy);
     minx = min(x, minx);
     miny = min(y, miny);
-    x = settings.getValue("settings:BL.X", points[BL].x);
-    y = settings.getValue("settings:BL.Y", points[BL].y);
+    x = calibration.getValue("calibration:BL.X", points[BL].x);
+    y = calibration.getValue("calibration:BL.Y", points[BL].y);
     maxx = max(x, maxx);
     maxy = max(y, maxy);
     minx = min(x, minx);
     miny = min(y, miny);
 
-    int camx = settings.getValue("settings:CAM.X", 0);
-    int camy = settings.getValue("settings:CAM.Y", 0);
+    int camx = calibration.getValue("calibration:CAM.X", 0);
+    int camy = calibration.getValue("calibration:CAM.Y", 0);
     minx -= camx;
     maxx -= camx;
     miny -= camy;

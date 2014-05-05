@@ -34,6 +34,7 @@ class testApp : public ofBaseApp{
 
         int camX, camY;
         int camW, camH;
+        int angle;
 
 
 

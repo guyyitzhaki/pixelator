@@ -30,7 +30,8 @@ public:
     void saveSettings();
     void loadSettings();
     void setFullScreen();
-
+    float mapXtoW(float val, float srcW);
+    float mapYtoH(float val, float srcH);
     ofxKinect kinect;
     ofxCvGrayscaleImage depthImage; // grayscale depth image
     ofxCvContourFinder contourFinder;
@@ -49,6 +50,11 @@ public:
     bool fullscreen;
 
     ofRectangle projectionArea;
+
+    ofVideoPlayer movie;
+    ofxCvGrayscaleImage grayFrame;
+    ofxCvColorImage frame;
+    ofxCvGrayscaleImage masked;
 
 
 
