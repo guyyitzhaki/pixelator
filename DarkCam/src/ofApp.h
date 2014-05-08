@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxOpenCv.h"
+#include "ofxUI.h"
 #include "ofxKinect.h"
 #include "ofxXmlSettings.h"
 
@@ -30,6 +31,10 @@ public:
     void saveSettings();
     void loadSettings();
     void setFullScreen();
+    void switchMovie(string name);
+    void guiEvent(ofxUIEventArgs &e);
+
+
     float mapXtoW(float val, float srcW);
     float mapYtoH(float val, float srcH);
     ofxKinect kinect;
@@ -55,6 +60,14 @@ public:
     ofxCvGrayscaleImage grayFrame;
     ofxCvColorImage frame;
     ofxCvGrayscaleImage masked;
+
+    bool scan;
+    int scanGap;
+    int scanY;
+
+    ofSoundPlayer  sound;
+
+    ofxUICanvas *gui;
 
 
 
