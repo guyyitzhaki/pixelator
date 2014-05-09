@@ -4,9 +4,10 @@
 void ofApp::setup() {
 	showControls = true;
 	fullscreen = true;
+    recorded = true;
+    startTime = 0;
 	setFullScreen();
 	ofBackground(ofColor::black);
-
 	// enable depth->video image calibration?
 	kinect.setRegistration(false);
 
@@ -21,7 +22,6 @@ void ofApp::setup() {
 
 	loadCameraCalibration();
 	loadSettings();
-
 
 	grayFrame.allocate(kinect.width, kinect.height);
 	frame.allocate(kinect.width, kinect.height);
@@ -59,6 +59,8 @@ void ofApp::setup() {
 	ofAddListener(gui->newGUIEvent, this, &ofApp::guiEvent);
 	gui->loadSettings("settings.xml");
 
+	receiver.setup(PORT);
+
 
 }
 
@@ -91,11 +93,35 @@ void ofApp::update() {
 		// update the cv images
 		depthImage.flagImageChanged();
 
-
 		contourFinder.findContours(depthImage, 100, (kinect.width*kinect.height)/2, 2, false);
 	}
 
+	updateReceiver();
+	if (recorded == false) {
+        if (ofGetElapsedTimef() - startTime > RECORD_AFTER) {
+            recorded = true;
+            ofImage frame;
+            frame.setFromPixels(depthImage.getPixels(), kinect.width, kinect.height, OF_IMAGE_COLOR);
+            frame.saveImage("frame.png");
+            cout < "saved\n";
+        }
+	}
 
+
+}
+
+void ofApp::updateReceiver() {
+	while(receiver.hasWaitingMessages()){
+		ofxOscMessage m;
+		receiver.getNextMessage(&m);
+		if(m.getAddress() == "/start"){
+			int arg = m.getArgAsInt32(0);
+            cout << "received arg:" << arg << "\n";
+            startTime = ofGetElapsedTimef();
+            recorded = false;
+            //sound.play();
+		}
+	}
 }
 
 //--------------------------------------------------------------

@@ -3,9 +3,12 @@
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "ofxUI.h"
+#include "ofxOSC.h"
 #include "ofxKinect.h"
 #include "ofxXmlSettings.h"
 
+#define PORT 12000
+#define RECORD_AFTER 10
 class ofApp : public ofBaseApp
 {
 
@@ -33,6 +36,7 @@ public:
     void setFullScreen();
     void switchMovie(string name);
     void guiEvent(ofxUIEventArgs &e);
+    void updateReceiver();
 
 
     float mapXtoW(float val, float srcW);
@@ -68,7 +72,9 @@ public:
     ofSoundPlayer  sound;
 
     ofxUICanvas *gui;
-
+    ofxOscReceiver receiver;
+    float startTime;
+    bool recorded;
 
 
 
