@@ -36,6 +36,7 @@ public:
     void gotMessage(ofMessage msg);
 
     void setupRecorder();
+    void startRecording();
     void cleanup();
     void loadFace(string face);
     void captureEye();

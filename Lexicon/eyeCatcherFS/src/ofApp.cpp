@@ -48,10 +48,7 @@ void ofApp::setup()
 {
     ofSetVerticalSync(true);
     gui = new ofxUICanvas();
-    gui->addLabel("FACES", OFX_UI_FONT_LARGE);
-    gui->addButton("BIBI", false, 64, 64);
- //   gui->addImageButton("BIBI2", "faces/bibi.jpg", false, 64, 64);
-
+    gui->addFPS();
     loadSettings();
 
     camX = ofGetWidth()/2 - camWidth / 2;
@@ -175,10 +172,16 @@ void ofApp::update()
         }
     }
 
-    if (now - lastCaptureEnded > captureEvery) {
-        recording = true;
+    if ((now - lastCaptureEnded > captureEvery) && (!recording)) {
+        startRecording();
     }
 
+}
+
+void ofApp::startRecording() {
+        recording = true;
+        delete recorder;
+        setupRecorder();
 }
 
 void ofApp::substituteFace()
@@ -347,12 +350,15 @@ void ofApp::draw()
     }
     ofTranslate(-camX,-camY);
 
+    ofSetColor(255);
+    src.draw(ofGetWidth() - 100, ofGetHeight() - 100, 80, 80);
 
-    ofSetColor(ofColor::white);
+ /*   ofSetColor(ofColor::white);
     stringstream reportStream;
     reportStream << "fps " << ofGetFrameRate() << endl;
     reportStream << "file " << filename << endl;
     ofDrawBitmapString(reportStream.str(), 20,20);
+    */
 }
 
 void ofApp::updateFace()
@@ -360,6 +366,7 @@ void ofApp::updateFace()
     currentFace = ofClamp(currentFace,0,faces.size()-1);
     if(faces.size()!=0)
     {
+        cout << "loading " << faces.getPath(currentFace) << endl;
         loadFace(faces.getPath(currentFace));
     }
 
@@ -404,10 +411,11 @@ void ofApp::keyPressed(int key)
     case ' ':
         gui->toggleVisible();
         break;
+    case 'f':
+        ofToggleFullscreen();
+        break;
     case 'r':
-        recording = !recording;
-        delete recorder;
-        setupRecorder();
+        startRecording();
         break;
     case 's':
         fname = "screen" + ofGetTimestampString("%n%e%H%M%S") + ".png";
@@ -421,10 +429,15 @@ void ofApp::keyPressed(int key)
         break;
     case OF_KEY_UP:
         currentFace++;
+        if (currentFace >= faces.size())
+            currentFace = 0;
         updateFace();
         break;
     case OF_KEY_DOWN:
         currentFace--;
+        if (currentFace < 0)
+            currentFace = faces.size() - 1;
+        cout << currentFace;
         updateFace();
         break;
     }
