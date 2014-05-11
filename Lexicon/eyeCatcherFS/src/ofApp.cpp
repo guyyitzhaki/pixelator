@@ -50,7 +50,7 @@ void ofApp::setup()
     gui = new ofxUICanvas();
     gui->addLabel("FACES", OFX_UI_FONT_LARGE);
     gui->addButton("BIBI", false, 64, 64);
-    gui->addImageButton("BIBI2", "faces/bibi.jpg", false, 64, 64);
+ //   gui->addImageButton("BIBI2", "faces/bibi.jpg", false, 64, 64);
 
     loadSettings();
 
@@ -173,6 +173,10 @@ void ofApp::update()
             delete finished[i];
             finished.erase(finished.begin() + i);
         }
+    }
+
+    if (now - lastCaptureEnded > captureEvery) {
+        recording = true;
     }
 
 }
@@ -301,16 +305,18 @@ void ofApp::captureEye()
         }
         if (frameCount == MAX_FRAMES)
         {
+            float now = ofGetElapsedTimef();
             recording = false;
             blinkOn = false;
             recorder->finishMovie();
             frameCount = 0;
             video_data *vd = new video_data();
             vd->filename = filename;
-            vd->time = ofGetElapsedTimef();
+            vd->time = now;
             finished.push_back(vd);
             filename = "";
-            cout <<  "done at " << ofGetElapsedTimef() << "\n";
+            lastCaptureEnded = now;
+            cout <<  "done at " << now << "\n";
         }
     }
 
@@ -372,18 +378,21 @@ void ofApp::saveSettings() {
     settings.setValue("settings:camheight", camHeight);
     settings.setValue("settings:slicewidth", sliceWidth);
     settings.setValue("settings:sliceheight", sliceHeight);
+    settings.setValue("settings:captureEvery", captureEvery);
     settings.saveFile("settings.xml");
 
 }
 
 void ofApp::loadSettings() {
+    lastCaptureEnded = 0;
     ofxXmlSettings settings;
     settings.loadFile("settings.xml");
     deviceId = settings.getValue("settings:deviceId", 0);
-    camWidth = settings.getValue("settings:camwidth", 1024);
-    camHeight = settings.getValue("settings:camheight", 768);
-    sliceWidth = settings.getValue("settings:slicewidth", 800);
-    sliceHeight = settings.getValue("settings:sliceheight", 600);
+    camWidth = settings.getValue("settings:camwidth", 800);
+    camHeight = settings.getValue("settings:camheight", 600);
+    sliceWidth = settings.getValue("settings:slicewidth", 80);
+    sliceHeight = settings.getValue("settings:sliceheight", 60);
+    captureEvery = settings.getValue("settings:captureEvery", 60);
 }
 
 //--------------------------------------------------------------

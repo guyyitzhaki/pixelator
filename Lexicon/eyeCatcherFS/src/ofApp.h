@@ -91,6 +91,9 @@ public:
     ofDirectory faces;
 	int currentFace;
 
+	float captureEvery;
+	float lastCaptureEnded;
+
 
 
 };
