@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxMtlMapping2D.h"
 #include "ofxImageSequence.h"
+#include "ofxXmlSettings.h"
 
 #define NUM_VIDEOS 256
 
@@ -16,6 +17,11 @@ public:
 	void setTarget(int x, int y);
 	void place(int x, int y);
     void switchTo(string path);
+    void setPaused(bool b);
+    void pause();
+    void unpause();
+    bool isPaused();
+
 private:
     void play(string path);
     ofVideoPlayer player;
@@ -24,6 +30,7 @@ private:
 	int sourcex, sourcey;
 	float time;
 	bool migrate;
+	bool paused;
 
 };
 
@@ -48,7 +55,12 @@ public:
 	string getRandomVideo();
 	void loadVideos();
 	void switchVideo();
+	void loadSettings();
+
+
+
 private:
+    string videoPath;
 	bool loaded;
 	ofxMtlMapping2D* _mapping;
 	VideoPart	parts[NUM_VIDEOS];
@@ -57,6 +69,9 @@ private:
 	int switchEvery;
 	bool config;
 	void setupVideo(int idx, string path);
+
+	bool pauseMode;
+	float lastPause, pauseGap, minPause, maxPause;
 
 
 };

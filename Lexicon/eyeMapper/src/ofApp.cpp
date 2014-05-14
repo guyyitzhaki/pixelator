@@ -1,6 +1,8 @@
 #include "ofApp.h"
 
 VideoPart::VideoPart() {
+    paused = false;
+    migrate = false;
 }
 
 VideoPart::~VideoPart() {
@@ -37,6 +39,8 @@ void VideoPart::update()  {
 }
 
 void VideoPart::draw()  {
+    if (paused)
+        return;
     player.draw(x, y, w, h);
 }
 
@@ -63,6 +67,22 @@ void VideoPart::setTarget(int _x, int _y) {
     time = 0.0;
 }
 
+void VideoPart::setPaused(bool b) {
+    paused = b;
+}
+
+void VideoPart::pause() {
+    setPaused(true);
+}
+
+void VideoPart::unpause() {
+    setPaused(false);
+}
+
+bool VideoPart::isPaused() {
+    return paused;
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -71,10 +91,9 @@ void ofApp::setup()
     ofSetFrameRate(60);
     ofBackground(50);
     lastSwitch = ofGetElapsedTimef();
-    switchEvery = 10;
-    sliceWidth  = 64;
-    sliceHeight = 48;
+    loadSettings();
     loadVideos();
+    pauseMode = false;
 
     _mapping = new ofxMtlMapping2D();
     _mapping->init(ofGetWidth(), ofGetHeight(), "mapping/xml/shapes.xml", "mapping/controls/mapping.xml");
@@ -89,6 +108,10 @@ void ofApp::update()
   //      videos[i].update();
         parts[i].update();
     }
+    if (pauseMode) {
+        int idx = ofRandom(0,NUM_VIDEOS);
+        parts[idx].pause();
+    }
     if (ofGetElapsedTimef() - lastSwitch > switchEvery)
     {
         lastSwitch = ofGetElapsedTimef();
@@ -99,7 +122,6 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-    // ----
     if (loaded)
     {
         _mapping->bind();
@@ -140,13 +162,16 @@ void ofApp::loadVideos()
 
 vector<string> ofApp::getVideos() {
     vector<string> eyes;
-    string path = "";
-    ofDirectory dir(path);
+    ofDirectory dir(videoPath);
+    cout << dir.exists() << endl;
+    dir.allowExt("mp4");
+    dir.allowExt("mov");
     dir.listDir();
     string prefix = "eye";
     for(int i = 0; i < dir.numFiles(); i++)
     {
-        if (dir.getPath(i).substr(0,prefix.size()) == prefix)
+        cout << dir.getName(i) << endl;
+        if (dir.getName(i).substr(0,prefix.size()) == prefix)
         {
             eyes.push_back(dir.getPath(i));
         }
@@ -191,7 +216,17 @@ void ofApp::keyPressed(int key)
             ofHideCursor();
         }
         break;
-     case 'x': {
+    case 'P':
+        for (int i = 0; i < NUM_VIDEOS; i++) {
+            parts[i].setPaused(!parts[i].isPaused());
+        }
+        break;
+
+    case 'p':
+        pauseMode = !pauseMode;
+        break;
+
+    case 'x': {
         vector<int> nums;
         for (int i = 0; i < NUM_VIDEOS; i++)
         {
@@ -216,6 +251,17 @@ void ofApp::keyPressed(int key)
 
      }
     }
+}
+
+void ofApp::loadSettings() {
+    ofxXmlSettings settings;
+    settings.load("settings.xml");
+    videoPath = settings.getValue("settings:videoPath", "c:/temp");
+    minPause = settings.getValue("settings:minPause", 2);
+    maxPause = settings.getValue("settings:maxPause", 10);
+    switchEvery = settings.getValue("settings:switchEvery", 10);
+    sliceWidth = settings.getValue("settings:sliceWidth", 64);
+    sliceHeight = settings.getValue("settings:sliceHeight", 48);
 }
 
 //--------------------------------------------------------------
