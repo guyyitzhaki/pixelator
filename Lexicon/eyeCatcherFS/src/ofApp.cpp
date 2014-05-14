@@ -166,7 +166,7 @@ void ofApp::update()
         if (now - finished[i]->time > WRITE_DELAY)
         {
             ofFile f(finished[i]->filename);
-            f.copyTo("done\\eye" + finished[i]->filename);
+            f.copyTo(outputDir + "/eye" + finished[i]->filename);
             delete finished[i];
             finished.erase(finished.begin() + i);
         }
@@ -400,6 +400,8 @@ void ofApp::loadSettings() {
     sliceWidth = settings.getValue("settings:slicewidth", 80);
     sliceHeight = settings.getValue("settings:sliceheight", 60);
     captureEvery = settings.getValue("settings:captureEvery", 60);
+    outputDir = settings.getValue("settings:outputDir", "c:/temp");
+    cout << outputDir;
 }
 
 //--------------------------------------------------------------

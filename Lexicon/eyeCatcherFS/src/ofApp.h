@@ -94,7 +94,7 @@ public:
 
 	float captureEvery;
 	float lastCaptureEnded;
-
+    string outputDir;
 
 
 };
