@@ -4,8 +4,10 @@
 #include "ofxMtlMapping2D.h"
 #include "ofxImageSequence.h"
 #include "ofxXmlSettings.h"
+#include "ofxOsc.h"
 
 #define NUM_VIDEOS 256
+#define PORT 27900
 
 class VideoPart {
 public:
@@ -21,6 +23,7 @@ public:
     void pause();
     void unpause();
     bool isPaused();
+
 
 private:
     void play(string path);
@@ -56,6 +59,8 @@ public:
 	void loadVideos();
 	void switchVideo();
 	void loadSettings();
+	void shuffle();
+	void handleMessage(string msg);
 
 
 
@@ -69,6 +74,7 @@ private:
 	int switchEvery;
 	bool config;
 	void setupVideo(int idx, string path);
+    ofxOscReceiver receiver;
 
 	bool pauseMode;
 	float lastPause, pauseGap, minPause, maxPause;
