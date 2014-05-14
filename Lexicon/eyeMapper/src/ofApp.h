@@ -61,6 +61,7 @@ public:
 	void loadSettings();
 	void shuffle();
 	void handleMessage(string msg);
+	void pausePart();
 
 
 

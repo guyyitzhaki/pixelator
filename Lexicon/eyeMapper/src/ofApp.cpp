@@ -100,6 +100,38 @@ void ofApp::setup() {
 
 }
 
+void ofApp::pausePart() {
+	lastPause = ofGetElapsedTimeMillis();
+	pauseGap = ofRandom(minPause, maxPause);
+
+	vector<int> nums;
+	for (int i = 0; i < NUM_VIDEOS; i++) {
+		nums.push_back(i);
+	}
+	random_shuffle(nums.begin(), nums.end());
+	bool found = false;
+	for (int  i = 0; i < NUM_VIDEOS; i++) {
+		int idx = nums[i];
+		if (!parts[idx].isPaused()) {
+			parts[idx].pause();
+			found = true;
+
+			cout << "pausing "<< idx << endl;
+			break;
+		}
+
+	}
+	if (!found) {
+		pauseMode = false;
+		for (int i = 0; i < NUM_VIDEOS; i++) {
+			parts[i].unpause();
+		}
+	}
+
+
+
+}
+
 //--------------------------------------------------------------
 void ofApp::update() {
 	_mapping->update();
@@ -107,8 +139,9 @@ void ofApp::update() {
 		parts[i].update();
 	}
 	if (pauseMode) {
-		int idx = ofRandom(0,NUM_VIDEOS);
-		parts[idx].pause();
+		if (ofGetElapsedTimeMillis() - lastPause > pauseGap) {
+			pausePart();
+		}
 	}
 	if (ofGetElapsedTimef() - lastSwitch > switchEvery) {
 		lastSwitch = ofGetElapsedTimef();
@@ -220,6 +253,9 @@ void ofApp::keyPressed(int key) {
 
 	case 'p':
 		pauseMode = !pauseMode;
+		if (pauseMode) {
+			pausePart();
+		}
 		break;
 
 	case 'x': {
