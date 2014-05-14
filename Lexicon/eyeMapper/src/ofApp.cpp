@@ -19,17 +19,19 @@ void VideoPart::play(string path) {
 }
 
 void VideoPart::update()  {
-    if (targetx != x) {
-        if (targetx > x)
-            x++;
-        else
-            x--;
-    }
-    if (targety != y) {
-        if (targety > y)
-            y++;
-        else
-            y--;
+    if (migrate) {
+        time += 0.05;
+        x = (1.0 - time) * sourcex + time * targetx;
+        y = (1.0 - time) * sourcey + time * targety;
+        if (time >= 1.0)
+        {
+            migrate = false;
+            x = targetx;
+            y = targety;
+            sourcex = x;
+            sourcey = y;
+        }
+
     }
     player.update();
 }
@@ -43,6 +45,8 @@ void VideoPart::place(int _x, int _y) {
     y = _y;
     targetx = x;
     targety = y;
+    sourcex = x;
+    sourcey = y;
 }
 
 void VideoPart::switchTo(string path) {
@@ -51,8 +55,12 @@ void VideoPart::switchTo(string path) {
 }
 
 void VideoPart::setTarget(int _x, int _y) {
+    sourcex = x;
+    sourcey = y;
     targetx = _x;
     targety = _y;
+    migrate = true;
+    time = 0.0;
 }
 
 //--------------------------------------------------------------
@@ -184,8 +192,25 @@ void ofApp::keyPressed(int key)
         }
         break;
      case 'x': {
-        for (int i = 0; i < NUM_VIDEOS; i++) {
-            parts[i].setTarget(ofRandom(ofGetWidth()),ofRandom(ofGetHeight()));
+        vector<int> nums;
+        for (int i = 0; i < NUM_VIDEOS; i++)
+        {
+            nums.push_back(i);
+        }
+        random_shuffle(nums.begin(), nums.end());
+
+
+        int xOffset = 0;
+        int yOffset = 0;
+        for (int i = 0; i < NUM_VIDEOS; i++)
+        {
+            parts[nums[i]].setTarget(xOffset,yOffset);
+            xOffset += sliceWidth;
+            if (xOffset >= ofGetWidth())
+            {
+                xOffset = 0;
+                yOffset += sliceHeight;
+            }
         }
         break;
 

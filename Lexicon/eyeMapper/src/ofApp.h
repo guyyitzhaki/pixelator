@@ -21,6 +21,9 @@ private:
     ofVideoPlayer player;
 	int x, y, w, h;
 	int targetx, targety;
+	int sourcex, sourcey;
+	float time;
+	bool migrate;
 
 };
 
