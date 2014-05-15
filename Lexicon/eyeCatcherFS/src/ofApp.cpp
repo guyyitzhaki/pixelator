@@ -134,8 +134,9 @@ void ofApp::update() {
 		cloneReady = tracker.getFound();
 		if(cloneReady) {
 			if (recording) {
-				captureEye();
+
 			}
+			captureEye();
 			substituteFace();
 		}
 	}
@@ -246,8 +247,7 @@ void ofApp::captureEye() {
 	addTexCoords(normLeft, leftRectImg.getVertices());
 	addTexCoords(normRight, rightRectImg.getVertices());
 
-	if (recording) {
-		eyeFbo.begin();
+    eyeFbo.begin();
 		ofSetColor(255);
 		ofFill();
 		cam.getTextureReference().bind();
@@ -258,6 +258,8 @@ void ofApp::captureEye() {
 		}
 		cam.getTextureReference().unbind();
 		eyeFbo.end();
+
+	if (recording) {
 
 		ofPixels pixels;
 		ofImage eyeImage;
@@ -302,7 +304,7 @@ void ofApp::draw() {
 	//tracker.draw(true);
 
 	if(src.getWidth() > 0 && cloneReady) {
-		clone.draw(0, 0);
+ 		clone.draw(0, 0);
 	} else {
 		cam.draw(0, 0);
 	}
@@ -316,6 +318,9 @@ void ofApp::draw() {
 
 	ofSetColor(255);
 	src.draw(ofGetWidth() - 100, ofGetHeight() - 100, 80, 80);
+    if (cloneReady)
+        eyeFbo.draw(ofGetWidth() - 100, 100);
+
 
 	/*   ofSetColor(ofColor::white);
 	   stringstream reportStream;
