@@ -228,7 +228,7 @@ void ofApp::switchVideo() {
 }
 
 void ofApp::setupVideo(int idx, string path) {
-	cout << "[" << idx << "] " << path << endl;
+//	cout << "[" << idx << "] " << path << endl;
 	parts[idx].init(path, sliceWidth, sliceHeight);
 }
 
