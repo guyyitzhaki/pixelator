@@ -6,7 +6,7 @@
 #include "ofxXmlSettings.h"
 #include "ofxOsc.h"
 
-#define NUM_VIDEOS  324
+#define NUM_VIDEOS  324 // for 1024X768: sliceSize 60X40
 #define PORT 27900
 
 class VideoPart {
