@@ -6,7 +6,7 @@
 		<Option makefile="makefile" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons\;src\;addons\ofxXmlSettings\libs\;addons\ofxUI\src\;addons\ofxMtlMapping2D\src\shapes\;addons\ofxMSAInteractiveObject\src\;addons\ofxMtlMapping2D\src\controls\;addons\ofxMtlMapping2D\src\utils\homography\;addons\ofxMtlMapping2D\src\utils\;addons\ofxMtlMapping2D\src\;addons\ofxMtlMapping2D\src\settings\;addons\ofxXmlSettings\src\;" />
+		<Option virtualFolders="addons\;src\;addons\ofxXmlSettings\libs\;addons\ofxUI\src\;addons\ofxMtlMapping2D\src\shapes\;addons\ofxMSAInteractiveObject\src\;addons\ofxMtlMapping2D\src\controls\;addons\ofxMtlMapping2D\src\utils\homography\;addons\ofxMtlMapping2D\src\utils\;addons\ofxMtlMapping2D\src\;addons\ofxMtlMapping2D\src\settings\;addons\ofxXmlSettings\src\;addons\ofxOsc\src\;addons\ofxOsc\libs\oscpack\src\ip\;addons\ofxOsc\libs\oscpack\src\ip\posix\;addons\ofxOsc\libs\oscpack\src\osc\;addons\ofxOsc\libs\oscpack\src\ip\win32\;" />
 		<Build>
 			<Target title="release">
 				<Option output="bin/$(PROJECT_NAME)" prefix_auto="1" extension_auto="1" />
@@ -85,13 +85,12 @@
 			<Add directory="../../../addons/ofxUI/src" />
 			<Add directory="../../../addons/ofxOsc/libs" />
 			<Add directory="../../../addons/ofxOsc/src" />
-			<Add directory="../../../addons\ofxOsc\libs\oscpack" />
-			<Add directory="../../../addons\ofxOsc\libs\oscpack\src" />
-			<Add directory="../../../addons\ofxOsc\libs\oscpack\src\ip" />
-			<Add directory="../../../addons\ofxOsc\libs\oscpack\src\ip\posix" />
-			<Add directory="../../../addons\ofxOsc\libs\oscpack\src\ip\win32" />
-			<Add directory="../../../addons\ofxOsc\libs\oscpack\src\osc" />
-			<Add directory="../../../addons\ofxOsc\src" />
+			<Add directory="../../../addons/ofxOsc/libs/oscpack" />
+			<Add directory="../../../addons/ofxOsc/libs/oscpack/src" />
+			<Add directory="../../../addons/ofxOsc/libs/oscpack/src/ip" />
+			<Add directory="../../../addons/ofxOsc/libs/oscpack/src/ip/posix" />
+			<Add directory="../../../addons/ofxOsc/libs/oscpack/src/ip/win32" />
+			<Add directory="../../../addons/ofxOsc/libs/oscpack/src/osc" />
 		</Compiler>
 		<Linker>
 			<Add library="..\..\..\libs\FreeImage\lib\win_cb\FreeImage.lib" />
@@ -228,6 +227,102 @@
 		</Unit>
 		<Unit filename="../../../addons/ofxMtlMapping2D/src/utils/mtlUtils.h">
 			<Option virtualFolder="addons/ofxMtlMapping2D/src/utils" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/IpEndpointName.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/IpEndpointName.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/NetworkingUtils.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/PacketListener.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/TimerListener.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/UdpSocket.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/posix/NetworkingUtils.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip/posix" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/posix/UdpSocket.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip/posix" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/win32/NetworkingUtilsWin.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip/win32" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/ip/win32/UdpSocketWin.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/ip/win32" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/MessageMappingOscPacketListener.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscException.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscHostEndianness.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscPacketListener.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscPrintReceivedElements.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscPrintReceivedElements.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscReceivedElements.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscReceivedElements.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscTypes.cpp">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/libs/oscpack/src/osc/OscTypes.h">
+			<Option virtualFolder="addons/ofxOsc/libs/oscpack/src/osc" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOsc.h">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscArg.h">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscBundle.cpp">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscBundle.h">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscMessage.cpp">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscMessage.h">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscReceiver.cpp">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscReceiver.h">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscSender.cpp">
+			<Option virtualFolder="addons/ofxOsc/src" />
+		</Unit>
+		<Unit filename="../../../addons/ofxOsc/src/ofxOscSender.h">
+			<Option virtualFolder="addons/ofxOsc/src" />
 		</Unit>
 		<Unit filename="../../../addons/ofxUI/src/ofxUI.h">
 			<Option virtualFolder="addons/ofxUI/src" />
@@ -511,102 +606,6 @@
 		<Unit filename="../../../addons/ofxUI/src/ofxUIWrapper.h">
 			<Option virtualFolder="addons/ofxUI/src" />
 		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOsc.h">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscArg.h">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscBundle.cpp">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscBundle.h">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscMessage.cpp">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscMessage.h">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscReceiver.cpp">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscReceiver.h">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscSender.cpp">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\src\ofxOscSender.h">
-			<Option virtualFolder="addons\ofxOsc\src" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip\posix" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip\posix" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip\win32" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\ip\win32" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscException.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
-		<Unit filename="../../../addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h">
-			<Option virtualFolder="addons\ofxOsc\libs\oscpack\src\osc" />
-		</Unit>
 		<Unit filename="../../../addons/ofxXmlSettings/libs/tinyxml.cpp">
 			<Option virtualFolder="addons/ofxXmlSettings/libs" />
 		</Unit>
@@ -627,6 +626,30 @@
 		</Unit>
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="src/CLine.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/CLine.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/CPoint.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/CPoint.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/CPolygon.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/CPolygon.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/CShape.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/CShape.h">
+			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src" />

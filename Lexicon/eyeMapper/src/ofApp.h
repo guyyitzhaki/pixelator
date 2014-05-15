@@ -6,6 +6,12 @@
 #include "ofxXmlSettings.h"
 #include "ofxOsc.h"
 
+#include "CPoint.h"
+#include "CShape.h"
+#include "CLine.h"
+#include "CPolygon.h"
+
+#define USE_MTL_MAPPING false
 #define NUM_VIDEOS  324 // for 1024X768: sliceSize 60X40
 #define PORT 27900
 
@@ -62,10 +68,12 @@ public:
 	void shuffle();
 	void handleMessage(string msg);
 	void pausePart();
-
+    void loadMasks();
 
 
 private:
+    bool useMtlMapping;
+    vector<CShape *> masks;
     string videoPath;
 	bool loaded;
 	ofxMtlMapping2D* _mapping;
