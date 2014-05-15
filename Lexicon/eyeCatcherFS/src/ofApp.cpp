@@ -81,7 +81,8 @@ void ofApp::setup()
     setupRecorder();
 
     tracker.setup();
-    tracker.setIterations(5);
+    tracker.setIterations(10);
+    tracker.setAttempts(1);
     leftEyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
     rightEyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
 
@@ -161,6 +162,8 @@ void ofApp::update()
             captureEye();
             substituteFace();
         }
+        else
+            blinkOn = false;
     }
 
     float now = ofGetElapsedTimef();
