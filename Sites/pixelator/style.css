@@ -9,7 +9,7 @@ html, body {
 }
 
 .title {
-	color: #E8173A;
+	color: #F20C0C;
 	font-weight: 400;
 }
 
@@ -31,7 +31,7 @@ a {
 }
 
 a:hover {
-  color: #E8173A;
+  color: #F20C0C;
   text-decoration: none;
 }
 
