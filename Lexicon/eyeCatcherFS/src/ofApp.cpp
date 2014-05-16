@@ -53,6 +53,8 @@ void ofApp::setup()
 
     camX = ofGetWidth()/2 - camWidth / 2;
     camY = ofGetHeight() / 2 - camHeight / 2;
+    cloneW = 800;
+    cloneH = 600;
 
     vector<ofVideoDevice> devices = cam.listDevices();
     for(int i = 0; i < devices.size(); i++)
@@ -79,7 +81,10 @@ void ofApp::setup()
     setupRecorder();
 
     tracker.setup();
-    eyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
+    tracker.setIterations(10);
+    tracker.setAttempts(1);
+    leftEyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
+    rightEyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
 
     cloneReady = false;
     clone.setup(cam.getWidth(), cam.getHeight());
@@ -103,6 +108,7 @@ void ofApp::setup()
     }
 
     ofBackground(0);
+    gui->toggleVisible();
 
 }
 
@@ -144,6 +150,7 @@ void ofApp::update()
     cam.update();
     if(cam.isFrameNew())
     {
+
         tracker.update(toCv(cam));
         position = tracker.getPosition();
         scale = tracker.getScale();
@@ -152,12 +159,11 @@ void ofApp::update()
         cloneReady = tracker.getFound();
         if(cloneReady)
         {
-            if (recording)
-            {
-                captureEye();
-            }
+            captureEye();
             substituteFace();
         }
+        else
+            blinkOn = false;
     }
 
     float now = ofGetElapsedTimef();
@@ -166,22 +172,26 @@ void ofApp::update()
         if (now - finished[i]->time > WRITE_DELAY)
         {
             ofFile f(finished[i]->filename);
-            f.copyTo("done\\eye" + finished[i]->filename);
+            f.copyTo(outputDir + "/eye" + finished[i]->filename);
+            cout << "copied to " << outputDir << "/eye" << finished[i]->filename << endl;
             delete finished[i];
             finished.erase(finished.begin() + i);
         }
     }
 
-    if ((now - lastCaptureEnded > captureEvery) && (!recording)) {
+    if ((now - lastCaptureEnded > captureEvery) && (!recording))
+    {
+        cout << "starting at " << now << endl;
         startRecording();
     }
 
 }
 
-void ofApp::startRecording() {
-        recording = true;
-        delete recorder;
-        setupRecorder();
+void ofApp::startRecording()
+{
+    recording = true;
+    delete recorder;
+    setupRecorder();
 }
 
 void ofApp::substituteFace()
@@ -270,27 +280,32 @@ void ofApp::captureEye()
     addTexCoords(normLeft, leftRectImg.getVertices());
     addTexCoords(normRight, rightRectImg.getVertices());
 
+    leftEyeFbo.begin();
+    ofSetColor(255);
+    ofFill();
+    cam.getTextureReference().bind();
+    normLeft.draw();
+    cam.getTextureReference().unbind();
+    leftEyeFbo.end();
+
+    rightEyeFbo.begin();
+    ofSetColor(255);
+    ofFill();
+    cam.getTextureReference().bind();
+    normRight.draw();
+    cam.getTextureReference().unbind();
+    rightEyeFbo.end();
+
     if (recording)
     {
-        eyeFbo.begin();
-        ofSetColor(255);
-        ofFill();
-        cam.getTextureReference().bind();
-        if (left)
-        {
-            normLeft.draw();
-        }
-        else
-        {
-            normRight.draw();
-        }
-        cam.getTextureReference().unbind();
-        eyeFbo.end();
 
         ofPixels pixels;
         ofImage eyeImage;
         eyeImage.allocate(sliceWidth, sliceHeight, OF_IMAGE_COLOR);
-        eyeFbo.readToPixels(pixels);
+        if (left)
+            leftEyeFbo.readToPixels(pixels);
+        else
+            rightEyeFbo.readToPixels(pixels);
         eyeImage.setFromPixels(pixels);
 
         if (frameCount == 0)
@@ -329,36 +344,43 @@ void ofApp::captureEye()
 void ofApp::draw()
 {
     ofSetColor(ofColor::white);
-    ofTranslate(camX,camY);
+
+
     //cam.draw(0,0);
     //tracker.draw(true);
-
+    float imgX = ofGetWidth() / 2 - cloneW / 2;
+    float imgY = ofGetHeight() / 2 - cloneH / 2;
     if(src.getWidth() > 0 && cloneReady)
     {
-        clone.draw(0, 0);
+        clone.draw(imgX, imgY, cloneW, cloneH);
     }
     else
     {
-        cam.draw(0, 0);
+        cam.draw(imgX, imgY, cloneW, cloneH);
     }
 
     if (blinkOn)
     {
         ofSetColor(ofColor::red);
         ofFill();
-        ofCircle(40,40,10,10);
+        ofCircle(imgX + 40, imgY + 40, 7, 7);
     }
-    ofTranslate(-camX,-camY);
 
+    int gap = 10;
     ofSetColor(255);
-    src.draw(ofGetWidth() - 100, ofGetHeight() - 100, 80, 80);
+    src.draw(imgX + cloneW + gap,imgY ,100, 100);
+    if (cloneReady)
+    {
+        rightEyeFbo.draw(imgX + cloneW + gap, imgY + cloneH - sliceHeight);
+        leftEyeFbo.draw(imgX - sliceWidth - gap, imgY + cloneH - sliceHeight);
+    }
 
- /*   ofSetColor(ofColor::white);
-    stringstream reportStream;
-    reportStream << "fps " << ofGetFrameRate() << endl;
-    reportStream << "file " << filename << endl;
-    ofDrawBitmapString(reportStream.str(), 20,20);
-    */
+    /*   ofSetColor(ofColor::white);
+       stringstream reportStream;
+       reportStream << "fps " << ofGetFrameRate() << endl;
+       reportStream << "file " << filename << endl;
+       ofDrawBitmapString(reportStream.str(), 20,20);
+       */
 }
 
 void ofApp::updateFace()
@@ -372,13 +394,15 @@ void ofApp::updateFace()
 
 }
 
-void ofApp::captureImage() {
+void ofApp::captureImage()
+{
     ofImage capture;
     capture.setFromPixels(cam.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
     capture.saveImage("face"+ofGetTimestampString("%n%e%H%M%S") + ".png");
 }
 
-void ofApp::saveSettings() {
+void ofApp::saveSettings()
+{
     ofxXmlSettings settings;
     settings.setValue("settings:deviceId", deviceId);
     settings.setValue("settings:camwidth", camWidth);
@@ -386,11 +410,13 @@ void ofApp::saveSettings() {
     settings.setValue("settings:slicewidth", sliceWidth);
     settings.setValue("settings:sliceheight", sliceHeight);
     settings.setValue("settings:captureEvery", captureEvery);
+    settings.setValue("settings:outputDir", outputDir);
     settings.saveFile("settings.xml");
 
 }
 
-void ofApp::loadSettings() {
+void ofApp::loadSettings()
+{
     lastCaptureEnded = 0;
     ofxXmlSettings settings;
     settings.loadFile("settings.xml");
@@ -400,6 +426,8 @@ void ofApp::loadSettings() {
     sliceWidth = settings.getValue("settings:slicewidth", 80);
     sliceHeight = settings.getValue("settings:sliceheight", 60);
     captureEvery = settings.getValue("settings:captureEvery", 60);
+    outputDir = settings.getValue("settings:outputDir", "c:/temp");
+    cout << outputDir << endl;
 }
 
 //--------------------------------------------------------------

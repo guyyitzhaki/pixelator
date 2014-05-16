@@ -26,7 +26,7 @@ void main() {\
 	gl_FragColor = sum / float(samples);\
 }";
 
-char cloneShaderSource[] = 
+char cloneShaderSource[] =
 "#extension GL_ARB_texture_rectangle : enable\n"
 "uniform sampler2DRect src, srcBlur, dstBlur;\
 void main() {\
@@ -46,22 +46,22 @@ void Clone::setup(int width, int height) {
 	ofFbo::Settings settings;
 	settings.width = width;
 	settings.height = height;
-	
+
 	buffer.allocate(settings);
 	srcBlur.allocate(settings);
 	dstBlur.allocate(settings);
-	
+
 	maskBlurShader.setupShaderFromSource(GL_FRAGMENT_SHADER, maskBlurShaderSource);
 	cloneShader.setupShaderFromSource(GL_FRAGMENT_SHADER, cloneShaderSource);
 	maskBlurShader.linkProgram();
 	cloneShader.linkProgram();
-	
+
 	strength = 0;
 }
 
 void Clone::maskedBlur(ofTexture& tex, ofTexture& mask, ofFbo& result) {
 	int k = strength;
-	
+
 	buffer.begin();
 	maskBlurShader.begin();
 	maskBlurShader.setUniformTexture("tex", tex, 1);
@@ -71,7 +71,7 @@ void Clone::maskedBlur(ofTexture& tex, ofTexture& mask, ofFbo& result) {
 	tex.draw(0, 0);
 	maskBlurShader.end();
 	buffer.end();
-	
+
 	result.begin();
 	maskBlurShader.begin();
 	maskBlurShader.setUniformTexture("tex", buffer, 1);
@@ -90,11 +90,11 @@ void Clone::setStrength(int strength) {
 void Clone::update(ofTexture& src, ofTexture& dst, ofTexture& mask) {
 	maskedBlur(src, mask, srcBlur);
 	maskedBlur(dst, mask, dstBlur);
-	
+
 	buffer.begin();
 	ofPushStyle();
 	ofEnableAlphaBlending();
-	dst.draw(0, 0);	
+	dst.draw(0, 0);
 	cloneShader.begin();
 	cloneShader.setUniformTexture("src", src, 1);
 	cloneShader.setUniformTexture("srcBlur", srcBlur, 2);
@@ -107,5 +107,9 @@ void Clone::update(ofTexture& src, ofTexture& dst, ofTexture& mask) {
 }
 
 void Clone::draw(float x, float y) {
-	buffer.draw(x, y);
+	draw(x, y, buffer.getWidth(), buffer.getHeight());
+}
+
+void Clone::draw(float x, float y, float w, float h) {
+	buffer.draw(x, y, w, h);
 }

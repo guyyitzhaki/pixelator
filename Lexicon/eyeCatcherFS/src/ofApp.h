@@ -56,7 +56,7 @@ public:
     ofxQtVideoSaver *recorder;
     ofVideoGrabber cam;
 
-    ofFbo eyeFbo;
+    ofFbo leftEyeFbo, rightEyeFbo;
     ofMesh leftRectImg, rightRectImg;
 
     ofVec2f position;
@@ -94,7 +94,9 @@ public:
 
 	float captureEvery;
 	float lastCaptureEnded;
+    string outputDir;
 
+    float cloneW, cloneH;
 
 
 };

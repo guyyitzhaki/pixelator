@@ -3,8 +3,17 @@
 #include "ofMain.h"
 #include "ofxMtlMapping2D.h"
 #include "ofxImageSequence.h"
+#include "ofxXmlSettings.h"
+#include "ofxOsc.h"
 
-#define NUM_VIDEOS 256
+#include "CPoint.h"
+#include "CShape.h"
+#include "CLine.h"
+#include "CPolygon.h"
+
+#define USE_MTL_MAPPING false
+#define NUM_VIDEOS  324 // for 1024X768: sliceSize 60X40
+#define PORT 27900
 
 class VideoPart {
 public:
@@ -16,11 +25,21 @@ public:
 	void setTarget(int x, int y);
 	void place(int x, int y);
     void switchTo(string path);
+    void setPaused(bool b);
+    void pause();
+    void unpause();
+    bool isPaused();
+
+
 private:
     void play(string path);
     ofVideoPlayer player;
 	int x, y, w, h;
 	int targetx, targety;
+	int sourcex, sourcey;
+	float time;
+	bool migrate;
+	bool paused;
 
 };
 
@@ -45,7 +64,17 @@ public:
 	string getRandomVideo();
 	void loadVideos();
 	void switchVideo();
+	void loadSettings();
+	void shuffle();
+	void handleMessage(string msg);
+	void pausePart();
+    void loadMasks();
+
+
 private:
+    bool useMtlMapping;
+    vector<CShape *> masks;
+    string videoPath;
 	bool loaded;
 	ofxMtlMapping2D* _mapping;
 	VideoPart	parts[NUM_VIDEOS];
@@ -54,6 +83,10 @@ private:
 	int switchEvery;
 	bool config;
 	void setupVideo(int idx, string path);
+    ofxOscReceiver receiver;
+
+	bool pauseMode;
+	float lastPause, pauseGap, minPause, maxPause;
 
 
 };
