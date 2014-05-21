@@ -75,13 +75,14 @@ void ofApp::setup()
 
     loaded = false;
     recording = true;
+    tracking = false;
     frameCount = 0;
 
     cleanup();
     setupRecorder();
 
     tracker.setup();
-    tracker.setIterations(10);
+    tracker.setIterations(NOT_FOUND_ITERATIONS);
     tracker.setAttempts(1);
     leftEyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
     rightEyeFbo.allocate(sliceWidth, sliceHeight, GL_RGB);
@@ -159,11 +160,25 @@ void ofApp::update()
         cloneReady = tracker.getFound();
         if(cloneReady)
         {
+            if (!tracking)
+            {
+                tracker.setIterations(FOUND_ITERATIONS);
+                tracking = true;
+                cout << "setting iterations to " << FOUND_ITERATIONS << endl;
+            }
             captureEye();
             substituteFace();
         }
         else
+        {
             blinkOn = false;
+            if (tracking)
+            {
+                tracker.setIterations(NOT_FOUND_ITERATIONS);
+                tracking = false;
+                cout << "setting iterations to " << NOT_FOUND_ITERATIONS << endl;
+            }
+        }
     }
 
     float now = ofGetElapsedTimef();
@@ -179,13 +194,39 @@ void ofApp::update()
         }
     }
 
+
+
     if ((now - lastCaptureEnded > captureEvery) && (!recording))
     {
         cout << "starting at " << now << endl;
         startRecording();
     }
 
+    if (now - lastSwitch > switchEvery && (!recording))
+    {
+        nextFace();
+        lastSwitch = now;
+    }
+
 }
+
+void ofApp::nextFace()
+{
+    currentFace++;
+    if (currentFace >= faces.size())
+        currentFace = 0;
+    updateFace();
+
+}
+
+void ofApp::prevFace()
+{
+    currentFace--;
+    if (currentFace < 0)
+        currentFace = faces.size() - 1;
+    updateFace();
+}
+
 
 void ofApp::startRecording()
 {
@@ -405,11 +446,12 @@ void ofApp::saveSettings()
 {
     ofxXmlSettings settings;
     settings.setValue("settings:deviceId", deviceId);
-    settings.setValue("settings:camwidth", camWidth);
-    settings.setValue("settings:camheight", camHeight);
-    settings.setValue("settings:slicewidth", sliceWidth);
-    settings.setValue("settings:sliceheight", sliceHeight);
+    settings.setValue("settings:camWidth", camWidth);
+    settings.setValue("settings:camHeight", camHeight);
+    settings.setValue("settings:sliceWidth", sliceWidth);
+    settings.setValue("settings:sliceHeight", sliceHeight);
     settings.setValue("settings:captureEvery", captureEvery);
+    settings.setValue("settings:switchEvery", switchEvery);
     settings.setValue("settings:outputDir", outputDir);
     settings.saveFile("settings.xml");
 
@@ -421,13 +463,17 @@ void ofApp::loadSettings()
     ofxXmlSettings settings;
     settings.loadFile("settings.xml");
     deviceId = settings.getValue("settings:deviceId", 0);
-    camWidth = settings.getValue("settings:camwidth", 800);
-    camHeight = settings.getValue("settings:camheight", 600);
-    sliceWidth = settings.getValue("settings:slicewidth", 80);
-    sliceHeight = settings.getValue("settings:sliceheight", 60);
+    camWidth = settings.getValue("settings:camWidth", 800);
+    camHeight = settings.getValue("settings:camHeight", 600);
+    sliceWidth = settings.getValue("settings:sliceWidth", 80);
+    sliceHeight = settings.getValue("settings:sliceHeight", 60);
     captureEvery = settings.getValue("settings:captureEvery", 60);
+    switchEvery = settings.getValue("settings:switchEvery", 70);
     outputDir = settings.getValue("settings:outputDir", "c:/temp");
-    cout << outputDir << endl;
+    cout << "cam=" << camWidth << ", " << camHeight << endl;
+    cout << "slice=" << sliceWidth << ", " << sliceHeight << endl;
+    cout << "captureEvery=" << captureEvery << ", switchEvery=" << switchEvery << endl;
+    cout << "outputDir=" << outputDir << endl;
 }
 
 //--------------------------------------------------------------
@@ -456,17 +502,10 @@ void ofApp::keyPressed(int key)
         saveSettings();
         break;
     case OF_KEY_UP:
-        currentFace++;
-        if (currentFace >= faces.size())
-            currentFace = 0;
-        updateFace();
+        nextFace();
         break;
     case OF_KEY_DOWN:
-        currentFace--;
-        if (currentFace < 0)
-            currentFace = faces.size() - 1;
-        cout << currentFace;
-        updateFace();
+        prevFace();
         break;
     }
 }

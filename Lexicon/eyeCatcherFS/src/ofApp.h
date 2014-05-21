@@ -44,6 +44,9 @@ public:
     void updateFace();
     void captureImage();
 
+    void nextFace();
+    void prevFace();
+
     void saveSettings();
     void loadSettings();
 
@@ -94,9 +97,14 @@ public:
 
 	float captureEvery;
 	float lastCaptureEnded;
+	float switchEvery;
+	float lastSwitch;
     string outputDir;
 
     float cloneW, cloneH;
+    bool tracking;
+    int FOUND_ITERATIONS = 2;
+    int NOT_FOUND_ITERATIONS = 10;
 
 
 };
