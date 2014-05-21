@@ -133,6 +133,8 @@ void ofApp::loadFace(string face)
         srcTracker.update(toCv(src));
         srcPoints = srcTracker.getImagePoints();
     }
+    lastSwitch = ofGetElapsedTimef();
+
     cout << "loaded " << face << endl;
 }
 
@@ -205,7 +207,6 @@ void ofApp::update()
     if (now - lastSwitch > switchEvery && (!recording))
     {
         nextFace();
-        lastSwitch = now;
     }
 
 }
