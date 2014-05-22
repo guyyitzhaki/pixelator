@@ -130,8 +130,10 @@ void ofApp::loadFace(string face)
     src.loadImage(face);
     if(src.getWidth() > 0)
     {
+        srcTracker.reset();
         srcTracker.update(toCv(src));
         srcPoints = srcTracker.getImagePoints();
+
     }
     lastSwitch = ofGetElapsedTimef();
 
@@ -410,11 +412,11 @@ void ofApp::draw()
 
     int gap = 10;
     ofSetColor(255);
-    src.draw(imgX + cloneW + gap,imgY ,100, 100);
+    src.draw(imgX + cloneW - 100,imgY ,100, 100);
     if (cloneReady)
     {
-        rightEyeFbo.draw(imgX + cloneW + gap, imgY + cloneH - sliceHeight);
-        leftEyeFbo.draw(imgX - sliceWidth - gap, imgY + cloneH - sliceHeight);
+        rightEyeFbo.draw(imgX + cloneW + gap, imgY);
+        leftEyeFbo.draw(imgX - sliceWidth - gap, imgY);
     }
 
     /*   ofSetColor(ofColor::white);
