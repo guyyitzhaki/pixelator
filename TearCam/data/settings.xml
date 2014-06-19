@@ -1,0 +1,6 @@
+<settings>
+    <nearThreshold>243</nearThreshold>
+    <farThreshold>85</farThreshold>
+    <angle>-25</angle>
+    <imgdir>J:\\shared\\tears</imgdir>
+</settings>
